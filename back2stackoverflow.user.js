@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.1
+// @version      0.0.2
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -14,6 +14,8 @@
 // @match        https://programmerz.ru/questions/*
 // @match        http://www.4answered.com/questions/*
 // @match        https://www.4answered.com/questions/*
+// @match        http://4answered.com/questions/*
+// @match        https://4answered.com/questions/*
 // @match        http://code-examples.net/*/q/*
 // @match        https://code-examples.net/*/q/*
 // @match        http://code.i-harness.com/*/q/*
@@ -45,6 +47,7 @@ function originalUrl() {
         'qaru.site': '.question-text > .a-link',
         'askdev.info': '.question-text > .a-link',//тоже что и qaru.site
         'programmerz.ru': '.source-share-link',
+        '4answered.com': '.view_body span a',
         'www.4answered.com': '.view_body span a'
     }
     var link = m[location.host] && document.querySelector(m[location.host]);
