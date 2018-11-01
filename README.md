@@ -14,3 +14,4 @@ Supported sites:
 - code.i-harness.com
 - code-examples.net
 - quabr.com
+- stackovernet.com

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.2
+// @version      0.0.3
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -22,6 +22,10 @@
 // @match        https://code.i-harness.com/*/q/*
 // @match        http://quabr.com/*
 // @match        https://quabr.com/*
+// @match        http://stackovernet.com/*/q/*
+// @match        https://stackovernet.com/*/q/*
+// @match        http://*.stackovernet.com/*/q/*
+// @match        https://*.stackovernet.com/*/q/*
 // ==/UserScript==
 
 function last(a) {
@@ -30,8 +34,9 @@ function last(a) {
 
 function originalUrl() {
     var n = 0;
-    switch (location.host) {
-        case 'code.i-harness.com':
+    var host = location.hostname.split('.').slice(-2).join('.');
+    switch (host) {
+        case 'i-harness.com':
         case 'code-examples.net':
             n = parseInt(last(location.pathname.split('/')), 16) || 0;
             break;
@@ -48,7 +53,7 @@ function originalUrl() {
         'askdev.info': '.question-text > .a-link',//тоже что и qaru.site
         'programmerz.ru': '.source-share-link',
         '4answered.com': '.view_body span a',
-        'www.4answered.com': '.view_body span a'
+        'stackovernet.com': '.post-meta a'
     }
     var link = m[location.host] && document.querySelector(m[location.host]);
     return link ? link.href : null;
