@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.3
+// @version      0.0.4
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -55,7 +55,7 @@ function originalUrl() {
         '4answered.com': '.view_body span a',
         'stackovernet.com': '.post-meta a'
     }
-    var link = m[location.host] && document.querySelector(m[location.host]);
+    var link = m[host] && document.querySelector(m[host]);
     return link ? link.href : null;
 }
 
