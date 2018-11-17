@@ -15,3 +15,4 @@ Supported sites:
 - code-examples.net
 - quabr.com
 - stackovernet.com
+- qna.one
