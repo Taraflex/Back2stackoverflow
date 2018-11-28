@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.6
+// @version      0.0.7
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -22,7 +22,23 @@
 // @match        https://quabr.com/*
 // @match        https://stackovernet.com/*/q/*
 // @match        https://*.stackovernet.com/*/q/*
+// @match        https://stackoverrun.com/*/q/*
 // @match        https://qna.one/*
+// @match        https://devask.gr/questions/*
+// @match        https://devask.cz/questions/*
+// @match        https://devask.nl/questions/*
+// @match        https://devask.in/questions/*
+// @match        https://coredump.tech/questions/*
+// @match        https://coredump.ist/questions/*
+// @match        https://coredump.one/questions/*
+// @match        https://coredump.guru/questions/*
+// @match        https://coredump.ro/questions/*
+// @match        https://coredump.su/questions/*
+// @match        https://coredump.pt/questions/*
+// @match        https://coredump.uno/questions/*
+// @match        https://itkerdes.com/questions/*
+// @match        https://itproblemy.pl/questions/*
+// @match        https://frageit.de/questions/*
 // ==/UserScript==
 
 function last(a) {
@@ -48,10 +64,29 @@ function originalUrl() {
     var m = {
         'qaru.site': 'a[href^="https://stackoverflow.com/questions/"]',
         'askdev.info': 'a[href^="https://stackoverflow.com/questions/"]',
+
         'programmerz.ru': '.source-share-link',
         '4answered.com': '.view_body span a',
+        'qna.one': '.page-container-question .source-share-block a',
+
+        'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',
-        'qna.one': '.page-container-question .source-share-block a'
+
+        'devask.gr': '.fuente',
+        'devask.cz': '.fuente',
+        'devask.nl': '.fuente',
+        'devask.in': '.fuente',
+        'coredump.tech': '.fuente',
+        'coredump.ist': '.fuente',
+        'coredump.one': '.fuente',
+        'coredump.guru': '.fuente',
+        'coredump.ro': '.fuente',
+        'coredump.su': '.fuente',
+        'coredump.pt': '.fuente',
+        'coredump.uno': '.fuente',
+        'itkerdes.com': '.fuente',
+        'itproblemy.pl': '.fuente',
+        'frageit.de': '.fuente',
     }
     var link = m[host] && document.querySelector(m[host]);
     return link ? link.href : null;
