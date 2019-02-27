@@ -32,3 +32,5 @@ Supported sites:
 - itkerdes.com
 - itproblemy.pl
 - frageit.de
+- qa-help.ru
+- exceptionshub.com

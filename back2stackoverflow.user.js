@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.7
+// @version      0.0.8
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -39,6 +39,8 @@
 // @match        https://itkerdes.com/questions/*
 // @match        https://itproblemy.pl/questions/*
 // @match        https://frageit.de/questions/*
+// @match        https://qa-help.ru/questions/*
+// @match        https://exceptionshub.com/*
 // ==/UserScript==
 
 function last(a) {
@@ -56,6 +58,11 @@ function originalUrl() {
         case 'quabr.com':
             n = parseInt(location.pathname.split('/', 2)[1]) || 0;
             break;
+        case 'exceptionshub.com':
+            if (/\.html$/.test(location.pathname)) {
+                return 'https://stackoverflow.com/search?q=' + encodeURIComponent(document.querySelector('h1.name.post-title').textContent.trim());
+            }
+            break;
     }
     if (n > 0) {
         return 'https://stackoverflow.com/questions/' + n;
@@ -65,6 +72,7 @@ function originalUrl() {
         'qaru.site': 'a[href^="https://stackoverflow.com/questions/"]',
         'askdev.info': 'a[href^="https://stackoverflow.com/questions/"]',
 
+        'qa-help.ru': 'a.uncolored-text[href*="stackoverflow.com/questions/"]',//встречаются вопросы с ru.stackoverflow.com
         'programmerz.ru': '.source-share-link',
         '4answered.com': '.view_body span a',
         'qna.one': '.page-container-question .source-share-block a',
