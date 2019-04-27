@@ -9,12 +9,13 @@ Required [Tampermonkey](https://tampermonkey.net/) or [Greasemonkey](https://www
 Supported sites:
 - qaru.site
 - askdev.info
+- ubuntugeeks.com
 - programmerz.ru
-- 4answered.com
+- ~~4answered.com~~ (closed?)
 - code.i-harness.com
 - code-examples.net
 - quabr.com
-- qna.one
+- ~~qna.one~~ (closed?)
 - stackovernet.com
 - stackoverrun.com
 - devask.gr

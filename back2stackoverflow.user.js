@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.8
+// @version      0.0.9
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -8,7 +8,9 @@
 // @updateURL    https://raw.githubusercontent.com/Taraflex/Back2stackoverflow/master/back2stackoverflow.user.js
 // @match        http://qaru.site/questions/*
 // @match        https://qaru.site/questions/*
+// @match        http://askdev.info/questions/*
 // @match        https://askdev.info/questions/*
+// @match        https://ubuntugeeks.com/questions/*
 // @match        http://programmerz.ru/questions/*
 // @match        https://programmerz.ru/questions/*
 // @match        http://www.4answered.com/questions/*
@@ -68,9 +70,10 @@ function originalUrl() {
         return 'https://stackoverflow.com/questions/' + n;
     }
 
-    var m = {
-        'qaru.site': 'a[href^="https://stackoverflow.com/questions/"]',
-        'askdev.info': 'a[href^="https://stackoverflow.com/questions/"]',
+    var m = {        
+        'qaru.site': '.question-text > a[href*="stackoverflow.com/questions/"]',
+        'askdev.info': '.question-text > a[href*="stackoverflow.com/questions/"]',
+        'ubuntugeeks.com': '.question-text > a[href*="askubuntu.com/questions/"]',
 
         'qa-help.ru': 'a.uncolored-text[href*="stackoverflow.com/questions/"]',//встречаются вопросы с ru.stackoverflow.com
         'programmerz.ru': '.source-share-link',
