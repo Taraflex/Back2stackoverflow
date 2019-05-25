@@ -35,3 +35,4 @@ Supported sites:
 - frageit.de
 - qa-help.ru
 - exceptionshub.com
+- kotaeta.com
