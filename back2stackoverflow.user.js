@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.9
+// @version      0.0.10
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -44,6 +44,17 @@
 // @match        https://qa-help.ru/questions/*
 // @match        https://exceptionshub.com/*
 // @match        https://kotaeta.com/*
+// @match        https://ciupacabra.com/*
+// @match        https://de-vraag.com/*
+// @match        https://switch-case.ru/*
+// @match        https://switch-case.com/*
+// @match        https://es.switch-case.com/*
+// @match        https://pt.switch-case.com/*
+// @match        https://de.switch-case.com/*
+// @match        https://bn.switch-case.com/*
+// @match        https://ar.switch-case.com/*
+// @match        https://answer-id.com/*
+// @match        https://while-do.com/*
 // ==/UserScript==
 
 function last(a) {
@@ -71,7 +82,7 @@ function originalUrl() {
         return 'https://stackoverflow.com/questions/' + n;
     }
 
-    var m = {        
+    var m = {
         'qaru.site': '.question-text > a[href*="stackoverflow.com/questions/"]',
         'askdev.info': '.question-text > a[href*="stackoverflow.com/questions/"]',
         'ubuntugeeks.com': '.question-text > a[href*="askubuntu.com/questions/"]',
@@ -84,7 +95,18 @@ function originalUrl() {
         'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',
 
-        'kotaeta.com': '.wrapperfooter_question a[href*="stackexchange.com/questions/"]',
+        'kotaeta.com': '.footer_question.mt-3 > a',
+        'ciupacabra.com': '.footer_question.mt-3 > a',
+        'de-vraag.com': '.footer_question.mt-3 > a',
+        'switch-case.ru': '.footer_question.mt-3 > a',
+        'switch-case.com': '.footer_question.mt-3 > a',
+        'es.switch-case.com': '.footer_question.mt-3 > a',
+        'pt.switch-case.com': '.footer_question.mt-3 > a',
+        'de.switch-case.com': '.footer_question.mt-3 > a',
+        'bn.switch-case.com': '.footer_question.mt-3 > a',
+        'ar.switch-case.com': '.footer_question.mt-3 > a',
+        'answer-id.com': '.footer_question.mt-3 > a',
+        'while-do.com': '.footer_question.mt-3 > a',
 
         'devask.gr': '.fuente',
         'devask.cz': '.fuente',

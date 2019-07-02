@@ -36,3 +36,14 @@ Supported sites:
 - qa-help.ru
 - exceptionshub.com
 - kotaeta.com
+- ciupacabra.com
+- de-vraag.com
+- switch-case.ru
+- switch-case.com
+- es.switch-case.com
+- pt.switch-case.com
+- de.switch-case.com
+- bn.switch-case.com
+- ar.switch-case.com
+- answer-id.com
+- while-do.com
