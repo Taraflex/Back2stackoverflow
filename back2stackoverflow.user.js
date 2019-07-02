@@ -43,6 +43,7 @@
 // @match        https://frageit.de/questions/*
 // @match        https://qa-help.ru/questions/*
 // @match        https://exceptionshub.com/*
+// @match        https://kotaeta.com/*
 // ==/UserScript==
 
 function last(a) {
@@ -82,6 +83,8 @@ function originalUrl() {
 
         'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',
+
+        'kotaeta.com': '.wrapperfooter_question a[href*="stackexchange.com/questions/"]',
 
         'devask.gr': '.fuente',
         'devask.cz': '.fuente',
