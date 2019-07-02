@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.10
+// @version      0.0.11
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -55,6 +55,7 @@
 // @match        https://ar.switch-case.com/*
 // @match        https://answer-id.com/*
 // @match        https://while-do.com/*
+// @match        https://365airsoft.com/*/questions/*
 // ==/UserScript==
 
 function last(a) {
@@ -91,6 +92,7 @@ function originalUrl() {
         'programmerz.ru': '.source-share-link',
         '4answered.com': '.view_body span a',
         'qna.one': '.page-container-question .source-share-block a',
+        '365airsoft.com': '.origin > a',
 
         'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',

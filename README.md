@@ -47,3 +47,4 @@ Supported sites:
 - ar.switch-case.com
 - answer-id.com
 - while-do.com
+- 365airsoft.com
