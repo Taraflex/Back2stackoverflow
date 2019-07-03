@@ -56,6 +56,8 @@
 // @match        https://answer-id.com/*
 // @match        https://while-do.com/*
 // @match        https://365airsoft.com/*/questions/*
+// @match        https://codeday.me/bug/*
+// @match        https://publish.codeday.me/post/*
 // ==/UserScript==
 
 function last(a) {
@@ -78,6 +80,11 @@ function originalUrl() {
                 return 'https://stackoverflow.com/search?q=' + encodeURIComponent(document.querySelector('h1.name.post-title').textContent.trim());
             }
             break;
+        case 'codeday.me':
+            if (location.hostname.startsWith('publish.')) {
+                //@ts-ignore
+                return document.querySelectorAll('.panel-body a')[1].href;
+            }
     }
     if (n > 0) {
         return 'https://stackoverflow.com/questions/' + n;
@@ -93,6 +100,7 @@ function originalUrl() {
         '4answered.com': '.view_body span a',
         'qna.one': '.page-container-question .source-share-block a',
         '365airsoft.com': '.origin > a',
+        'codeday.me': '.article-es-url > a',
 
         'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',

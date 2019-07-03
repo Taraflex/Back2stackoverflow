@@ -48,3 +48,4 @@ Supported sites:
 - answer-id.com
 - while-do.com
 - 365airsoft.com
+- codeday.me
