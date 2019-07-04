@@ -56,7 +56,7 @@
 // @match        https://answer-id.com/*
 // @match        https://while-do.com/*
 // @match        https://365airsoft.com/*/questions/*
-// @match        https://codeday.me/bug/*
+// @match        https://codeday.me/*
 // @match        https://publish.codeday.me/post/*
 // ==/UserScript==
 
