@@ -58,6 +58,7 @@
 // @match        https://365airsoft.com/*/questions/*
 // @match        https://codeday.me/*
 // @match        https://publish.codeday.me/post/*
+// @match        https://issue.life/questions/*
 // ==/UserScript==
 
 function last(a) {
@@ -74,6 +75,9 @@ function originalUrl() {
             break;
         case 'quabr.com':
             n = parseInt(location.pathname.split('/', 2)[1]) || 0;
+            break;
+        case 'issue.life':
+            n = parseInt(location.pathname.split('/', 3)[2]) || 0;
             break;
         case 'exceptionshub.com':
             if (/\.html$/.test(location.pathname)) {
@@ -133,7 +137,7 @@ function originalUrl() {
         'itkerdes.com': '.fuente',
         'itproblemy.pl': '.fuente',
         'frageit.de': '.fuente',
-    }
+    };
     var link = m[host] && document.querySelector(m[host]);
     return link ? link.href : null;
 }
