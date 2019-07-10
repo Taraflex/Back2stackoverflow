@@ -49,3 +49,4 @@ Supported sites:
 - while-do.com
 - 365airsoft.com
 - codeday.me
+- issue.life
