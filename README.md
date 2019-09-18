@@ -7,7 +7,7 @@ Userscript for redirect to stackoverflow.com from machine-translated sites.
 Required [Tampermonkey](https://tampermonkey.net/) or [Greasemonkey](https://www.greasespot.net/) or [Violentmonkey](https://violentmonkey.github.io/get-it/) or another browser extension for userscript support.
 
 Supported sites:
-- qaru.site
+- ~~qaru.site~~ (closed?)
 - askdev.info
 - ubuntugeeks.com
 - programmerz.ru
@@ -18,21 +18,6 @@ Supported sites:
 - ~~qna.one~~ (closed?)
 - stackovernet.com
 - stackoverrun.com
-- devask.gr
-- devask.cz
-- devask.nl
-- devask.in
-- coredump.tech
-- coredump.ist
-- coredump.one
-- coredump.guru
-- coredump.ro
-- coredump.su
-- coredump.pt
-- coredump.uno
-- itkerdes.com
-- itproblemy.pl
-- frageit.de
 - qa-help.ru
 - exceptionshub.com
 - kotaeta.com
@@ -50,3 +35,4 @@ Supported sites:
 - 365airsoft.com
 - codeday.me
 - issue.life
+- *.coredump.biz
