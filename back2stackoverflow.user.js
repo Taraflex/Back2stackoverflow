@@ -45,6 +45,7 @@
 // @match        https://publish.codeday.me/post/*
 // @match        https://issue.life/questions/*
 // @match        https://*.coredump.biz/questions/*
+// @match        https://www.code-adviser.com/*
 // ==/UserScript==
 
 function last(a) {
@@ -107,7 +108,8 @@ function originalUrl() {
         'bn.switch-case.com': '.footer_question.mt-3 > a',
         'ar.switch-case.com': '.footer_question.mt-3 > a',
         'answer-id.com': '.footer_question.mt-3 > a',
-        'while-do.com': '.footer_question.mt-3 > a'
+        'while-do.com': '.footer_question.mt-3 > a',
+        'code-adviser.com': '.meta_data a'
     };
     var link = m[host] && document.querySelector(m[host]);
     return link ? link.href : null;
