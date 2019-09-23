@@ -36,3 +36,4 @@ Supported sites:
 - codeday.me
 - issue.life
 - *.coredump.biz
+- code-adviser.com
