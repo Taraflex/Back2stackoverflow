@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.15
+// @version      0.0.16
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -45,7 +45,8 @@
 // @match        https://publish.codeday.me/post/*
 // @match        https://issue.life/questions/*
 // @match        https://*.coredump.biz/questions/*
-// @match        https://www.code-adviser.com/*
+// @match        http://www.code-adviser.com/detail_*
+// @match        https://www.code-adviser.com/detail_*
 // ==/UserScript==
 
 function last(a) {
@@ -93,6 +94,7 @@ function originalUrl() {
         'qna.one': '.page-container-question .source-share-block a',
         '365airsoft.com': '.origin > a',
         'codeday.me': '.article-es-url > a',
+        'code-adviser.com': '.meta_data a',
 
         'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',
@@ -108,8 +110,7 @@ function originalUrl() {
         'bn.switch-case.com': '.footer_question.mt-3 > a',
         'ar.switch-case.com': '.footer_question.mt-3 > a',
         'answer-id.com': '.footer_question.mt-3 > a',
-        'while-do.com': '.footer_question.mt-3 > a',
-        'code-adviser.com': '.meta_data a'
+        'while-do.com': '.footer_question.mt-3 > a'
     };
     var link = m[host] && document.querySelector(m[host]);
     return link ? link.href : null;
