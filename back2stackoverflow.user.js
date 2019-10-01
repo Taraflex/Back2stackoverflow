@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.16
+// @version      0.0.17
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -47,6 +47,7 @@
 // @match        https://*.coredump.biz/questions/*
 // @match        http://www.code-adviser.com/detail_*
 // @match        https://www.code-adviser.com/detail_*
+// @match        https://ask-ubuntu.ru/questions/*
 // ==/UserScript==
 
 function last(a) {
@@ -95,6 +96,7 @@ function originalUrl() {
         '365airsoft.com': '.origin > a',
         'codeday.me': '.article-es-url > a',
         'code-adviser.com': '.meta_data a',
+        'ask-ubuntu.ru': '.q-source',
 
         'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',

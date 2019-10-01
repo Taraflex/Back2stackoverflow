@@ -37,3 +37,4 @@ Supported sites:
 - issue.life
 - *.coredump.biz
 - code-adviser.com
+- ask-ubuntu.ru
