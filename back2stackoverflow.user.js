@@ -48,6 +48,10 @@
 // @match        http://www.code-adviser.com/detail_*
 // @match        https://www.code-adviser.com/detail_*
 // @match        https://ask-ubuntu.ru/questions/*
+// @match        https://stackru.com/questions/*
+// @match        https://xbuba.com/questions/*
+// @match        https://web-answers.ru/*
+// @match        https://sprosi.pro/questions/*
 // ==/UserScript==
 
 function last(a) {
@@ -67,6 +71,8 @@ function originalUrl() {
             break;
         case 'coredump.biz':
         case 'issue.life':
+        case 'stackru.com':
+        case 'xbuba.com':
             n = parseInt(location.pathname.split('/', 3)[2]) || 0;
             break;
         case 'exceptionshub.com':
@@ -97,6 +103,8 @@ function originalUrl() {
         'codeday.me': '.article-es-url > a',
         'code-adviser.com': '.meta_data a',
         'ask-ubuntu.ru': '.q-source',
+        'web-answers.ru': '.source > a',
+        'sprosi.pro': '#qsource > a',
 
         'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',
