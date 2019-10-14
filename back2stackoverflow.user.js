@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.17
+// @version      0.0.18
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -50,6 +50,7 @@
 // @match        https://ask-ubuntu.ru/questions/*
 // @match        https://stackru.com/questions/*
 // @match        https://xbuba.com/questions/*
+// @match        http://web-answers.ru/*
 // @match        https://web-answers.ru/*
 // @match        https://sprosi.pro/questions/*
 // ==/UserScript==
