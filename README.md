@@ -38,3 +38,7 @@ Supported sites:
 - *.coredump.biz
 - code-adviser.com
 - ask-ubuntu.ru
+- stackru.com
+- xbuba.com
+- web-answers.ru
+- sprosi.pro
