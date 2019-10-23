@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.20
+// @version      0.0.21
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -54,6 +54,7 @@
 // @match        https://web-answers.ru/*
 // @match        https://sprosi.pro/questions/*
 // @match        https://askvoprosy.com/voprosy/*
+// @match        https://stackanswers.net/questions/*
 // ==/UserScript==
 
 function last(a) {
@@ -76,6 +77,7 @@ function originalUrl() {
         case 'xbuba.com':
             n = parseInt(location.pathname.split('/', 3)[2]) || 0;
             break;
+        case 'stackanswers.net':
         case 'askvoprosy.com':
             return 'https://stackoverflow.com/search?q=' + encodeURIComponent(location.pathname.split('/').slice(-1)[0]);
         case 'exceptionshub.com':

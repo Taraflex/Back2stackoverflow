@@ -43,3 +43,4 @@ Supported sites:
 - web-answers.ru
 - sprosi.pro
 - askvoprosy.com
+- stackanswers.net
