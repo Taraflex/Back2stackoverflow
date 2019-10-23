@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.18
+// @version      0.0.19
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -72,7 +72,6 @@ function originalUrl() {
             break;
         case 'coredump.biz':
         case 'issue.life':
-        case 'stackru.com':
         case 'xbuba.com':
             n = parseInt(location.pathname.split('/', 3)[2]) || 0;
             break;
@@ -103,9 +102,11 @@ function originalUrl() {
         '365airsoft.com': '.origin > a',
         'codeday.me': '.article-es-url > a',
         'code-adviser.com': '.meta_data a',
-        'ask-ubuntu.ru': '.q-source',
         'web-answers.ru': '.source > a',
         'sprosi.pro': '#qsource > a',
+
+        'stackru.com': '.q-source',
+        'ask-ubuntu.ru': '.q-source',
 
         'stackoverrun.com': '.post-meta a',
         'stackovernet.com': '.post-meta a',
