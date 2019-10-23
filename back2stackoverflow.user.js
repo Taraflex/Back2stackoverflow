@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.22
+// @version      0.0.23
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
 // @downloadURL  https://raw.githubusercontent.com/Taraflex/Back2stackoverflow/master/back2stackoverflow.user.js
 // @updateURL    https://raw.githubusercontent.com/Taraflex/Back2stackoverflow/master/back2stackoverflow.user.js
+// @match        https://stackoverflow.com/search?back2stackoverflow=1&q=*
 // @match        http://qaru.site/questions/*
 // @match        https://qaru.site/questions/*
 // @match        http://askdev.info/questions/*
@@ -63,6 +64,25 @@ function lastPathnamePart() {
 }
 
 function originalUrl() {
+    if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=1&q=')) {
+        var q = new URLSearchParams(location.search).get('q');
+        if (q) {
+            q = '/' + q;
+        }
+        var link = q && Array.prototype.slice.call(document.querySelectorAll('.result-link a')).find(function (link) {
+            //@ts-ignore
+            return link.href.indexOf(q, 36) !== -1;
+        });
+        if (link) {
+            try {
+                //@ts-ignore
+                history.replaceState(null, null, link.href);
+            } catch (e) { }
+            //@ts-ignore
+            return link.href;
+        }
+    }
+
     var n = 0;
     var host = location.hostname.split('.').slice(-2).join('.');
     switch (host) {
@@ -78,16 +98,14 @@ function originalUrl() {
         case 'xbuba.com':
             n = parseInt(location.pathname.split('/', 3)[2]) || 0;
             break;
+        case 'exceptionshub.com':
+            if (!/\.html$/.test(location.pathname)) {
+                break;
+            }
         case 'codengineering.ru':
-            return 'https://stackoverflow.com/search?q=' + encodeURIComponent(lastPathnamePart().replace(/-\d+$/, ''));
         case 'stackanswers.net':
         case 'askvoprosy.com':
-            return 'https://stackoverflow.com/search?q=' + encodeURIComponent(lastPathnamePart());
-        case 'exceptionshub.com':
-            if (/\.html$/.test(location.pathname)) {
-                return 'https://stackoverflow.com/search?q=' + encodeURIComponent(document.querySelector('h1.name.post-title').textContent.trim());
-            }
-            break;
+            return 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(lastPathnamePart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, ''));
         case 'codeday.me':
             if (location.hostname.startsWith('publish.')) {
                 //@ts-ignore
