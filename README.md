@@ -42,3 +42,4 @@ Supported sites:
 - xbuba.com
 - web-answers.ru
 - sprosi.pro
+- askvoprosy.com
