@@ -44,3 +44,4 @@ Supported sites:
 - sprosi.pro
 - askvoprosy.com
 - stackanswers.net
+- codengineering.ru

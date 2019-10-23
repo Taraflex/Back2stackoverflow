@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.21
+// @version      0.0.22
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -55,10 +55,11 @@
 // @match        https://sprosi.pro/questions/*
 // @match        https://askvoprosy.com/voprosy/*
 // @match        https://stackanswers.net/questions/*
+// @match        https://codengineering.ru/q/*
 // ==/UserScript==
 
-function last(a) {
-    return a ? a[a.length - 1] : null;
+function lastPathnamePart() {
+    return location.pathname.split('/').filter(Boolean).slice(-1)[0];
 }
 
 function originalUrl() {
@@ -67,7 +68,7 @@ function originalUrl() {
     switch (host) {
         case 'i-harness.com':
         case 'code-examples.net':
-            n = parseInt(last(location.pathname.split('/')), 16) || 0;
+            n = parseInt(lastPathnamePart(), 16) || 0;
             break;
         case 'quabr.com':
             n = parseInt(location.pathname.split('/', 2)[1]) || 0;
@@ -77,9 +78,11 @@ function originalUrl() {
         case 'xbuba.com':
             n = parseInt(location.pathname.split('/', 3)[2]) || 0;
             break;
+        case 'codengineering.ru':
+            return 'https://stackoverflow.com/search?q=' + encodeURIComponent(lastPathnamePart().replace(/-\d+$/, ''));
         case 'stackanswers.net':
         case 'askvoprosy.com':
-            return 'https://stackoverflow.com/search?q=' + encodeURIComponent(location.pathname.split('/').slice(-1)[0]);
+            return 'https://stackoverflow.com/search?q=' + encodeURIComponent(lastPathnamePart());
         case 'exceptionshub.com':
             if (/\.html$/.test(location.pathname)) {
                 return 'https://stackoverflow.com/search?q=' + encodeURIComponent(document.querySelector('h1.name.post-title').textContent.trim());
