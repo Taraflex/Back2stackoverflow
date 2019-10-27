@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.23
+// @version      0.0.24
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -57,6 +57,7 @@
 // @match        https://askvoprosy.com/voprosy/*
 // @match        https://stackanswers.net/questions/*
 // @match        https://codengineering.ru/q/*
+// @match        https://overcoder.net/q/*
 // ==/UserScript==
 
 function lastPathnamePart() {
@@ -130,6 +131,7 @@ function originalUrl() {
         'code-adviser.com': '.meta_data a',
         'web-answers.ru': '.source > a',
         'sprosi.pro': '#qsource > a',
+        'overcoder.net':'.info_outlink',
 
         'stackru.com': '.q-source',
         'ask-ubuntu.ru': '.q-source',

@@ -45,3 +45,4 @@ Supported sites:
 - askvoprosy.com
 - stackanswers.net
 - codengineering.ru
+- overcoder.net
