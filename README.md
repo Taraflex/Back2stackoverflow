@@ -46,3 +46,13 @@ Supported sites:
 - stackanswers.net
 - codengineering.ru
 - overcoder.net
+- coderquestion.ru
+- qacode.ru
+- progaide.com
+- stackz.ru/en
+- it-swarm.net
+- bonprog.com
+- bestecode.com
+- progexact.com
+- rstopup.com
+- profikoder.com

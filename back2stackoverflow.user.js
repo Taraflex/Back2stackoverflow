@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.24
+// @version      0.0.25
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -58,6 +58,16 @@
 // @match        https://stackanswers.net/questions/*
 // @match        https://codengineering.ru/q/*
 // @match        https://overcoder.net/q/*
+// @match        https://coderquestion.ru/q/*
+// @match        http://qacode.ru/questions/*
+// @match        https://progaide.com/question/*
+// @match        http://stackz.ru/en/*
+// @match        https://www.it-swarm.net/*
+// @match        https://bonprog.com/question/*
+// @match        https://bestecode.com/question/*
+// @match        https://progexact.com/question/*
+// @match        https://rstopup.com/*
+// @match        https://profikoder.com/question/*
 // ==/UserScript==
 
 function lastPathnamePart() {
@@ -67,12 +77,9 @@ function lastPathnamePart() {
 function originalUrl() {
     if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=1&q=')) {
         var q = new URLSearchParams(location.search).get('q');
-        if (q) {
-            q = '/' + q;
-        }
         var link = q && Array.prototype.slice.call(document.querySelectorAll('.result-link a')).find(function (link) {
             //@ts-ignore
-            return link.href.indexOf(q, 36) !== -1;
+            return link.href.indexOf('/' + q, 36) !== -1 || link.textContent.trim().endsWith(q);
         });
         if (link) {
             try {
@@ -94,6 +101,12 @@ function originalUrl() {
         case 'quabr.com':
             n = parseInt(location.pathname.split('/', 2)[1]) || 0;
             break;
+        case 'profikoder.com':
+        case 'progexact.com':
+        case 'bestecode.com':
+        case 'bonprog.com':
+        case 'progaide.com':
+        case 'coderquestion.ru':
         case 'coredump.biz':
         case 'issue.life':
         case 'xbuba.com':
@@ -103,6 +116,8 @@ function originalUrl() {
             if (!/\.html$/.test(location.pathname)) {
                 break;
             }
+        case 'stackz.ru':
+            return 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(document.querySelector('h1').textContent.trim());
         case 'codengineering.ru':
         case 'stackanswers.net':
         case 'askvoprosy.com':
@@ -131,7 +146,10 @@ function originalUrl() {
         'code-adviser.com': '.meta_data a',
         'web-answers.ru': '.source > a',
         'sprosi.pro': '#qsource > a',
-        'overcoder.net':'.info_outlink',
+        'overcoder.net': '.info_outlink',
+        'qacode.ru': '.question-info .cc-link',
+        'it-swarm.net': '.gat[data-cat="q-source"]',
+        'rstopup.com': '.td-post-content .origlink > a',
 
         'stackru.com': '.q-source',
         'ask-ubuntu.ru': '.q-source',
