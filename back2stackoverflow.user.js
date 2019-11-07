@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.26
+// @version      0.0.27
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -118,12 +118,12 @@ function originalUrl() {
             if (!/\.html$/.test(location.pathname)) {
                 break;
             }
-        case 'stackz.ru':
-            return 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(document.querySelector('h1').textContent.trim());
         case 'codengineering.ru':
         case 'stackanswers.net':
         case 'askvoprosy.com':
             return 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(lastPathnamePart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, ''));
+        case 'stackz.ru':
+            return 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(document.querySelector('h1').textContent.trim());
         case 'codeday.me':
             if (location.hostname.startsWith('publish.')) {
                 //@ts-ignore
