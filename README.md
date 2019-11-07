@@ -56,3 +56,4 @@ Supported sites:
 - progexact.com
 - rstopup.com
 - profikoder.com
+- itranslater.com

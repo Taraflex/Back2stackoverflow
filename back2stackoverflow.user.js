@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.25
+// @version      0.0.26
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -68,6 +68,8 @@
 // @match        https://progexact.com/question/*
 // @match        https://rstopup.com/*
 // @match        https://profikoder.com/question/*
+// @match        https://itranslater.com/qa/details/*
+// @match        https://www.itranslater.com/qa/details/*
 // ==/UserScript==
 
 function lastPathnamePart() {
@@ -150,6 +152,7 @@ function originalUrl() {
         'qacode.ru': '.question-info .cc-link',
         'it-swarm.net': '.gat[data-cat="q-source"]',
         'rstopup.com': '.td-post-content .origlink > a',
+        'itranslater.com': '.body > div:last-child > a',
 
         'stackru.com': '.q-source',
         'ask-ubuntu.ru': '.q-source',
