@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.27
+// @version      0.0.28
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -70,6 +70,11 @@
 // @match        https://profikoder.com/question/*
 // @match        https://itranslater.com/qa/details/*
 // @match        https://www.itranslater.com/qa/details/*
+// @match        http://ru.voidcc.com/question/*
+// @match        https://ru.voidcc.com/question/*
+// @match        http://v-resheno.ru/*
+// @match        https://v-resheno.ru/*
+// @match        https://src-bin.com/*/q/*
 // ==/UserScript==
 
 function lastPathnamePart() {
@@ -96,6 +101,10 @@ function originalUrl() {
     var n = 0;
     var host = location.hostname.split('.').slice(-2).join('.');
     switch (host) {
+        case 'v-resheno.ru':
+            var e = document.querySelector('.linkurl > b');
+            return e ? e.textContent : null
+        case 'src-bin.com':
         case 'i-harness.com':
         case 'code-examples.net':
             n = parseInt(lastPathnamePart(), 16) || 0;
@@ -153,6 +162,7 @@ function originalUrl() {
         'it-swarm.net': '.gat[data-cat="q-source"]',
         'rstopup.com': '.td-post-content .origlink > a',
         'itranslater.com': '.body > div:last-child > a',
+        'voidcc.com': '.source > a',
 
         'stackru.com': '.q-source',
         'ask-ubuntu.ru': '.q-source',

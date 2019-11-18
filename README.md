@@ -57,3 +57,6 @@ Supported sites:
 - rstopup.com
 - profikoder.com
 - itranslater.com
+- ru.voidcc.com
+- v-resheno.ru
+- src-bin.com
