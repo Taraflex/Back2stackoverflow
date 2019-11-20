@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.0.28
+// @version      0.1.0
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -21,8 +21,8 @@
 // @match        https://code-examples.net/*/q/*
 // @match        http://code.i-harness.com/*/q/*
 // @match        https://code.i-harness.com/*/q/*
-// @match        http://quabr.com/*
-// @match        https://quabr.com/*
+// @match        http://quabr.com/*/*
+// @match        https://quabr.com/*/*
 // @match        https://stackovernet.com/*/q/*
 // @match        https://*.stackovernet.com/*/q/*
 // @match        https://stackoverrun.com/*/q/*
@@ -42,7 +42,7 @@
 // @match        https://answer-id.com/*
 // @match        https://while-do.com/*
 // @match        https://365airsoft.com/*/questions/*
-// @match        https://codeday.me/*
+// @match        https://codeday.me/*/*
 // @match        https://publish.codeday.me/post/*
 // @match        https://issue.life/questions/*
 // @match        https://*.coredump.biz/questions/*
@@ -51,8 +51,8 @@
 // @match        https://ask-ubuntu.ru/questions/*
 // @match        https://stackru.com/questions/*
 // @match        https://xbuba.com/questions/*
-// @match        http://web-answers.ru/*
-// @match        https://web-answers.ru/*
+// @match        http://web-answers.ru/*/*
+// @match        https://web-answers.ru/*/*
 // @match        https://sprosi.pro/questions/*
 // @match        https://askvoprosy.com/voprosy/*
 // @match        https://stackanswers.net/questions/*
@@ -61,8 +61,9 @@
 // @match        https://coderquestion.ru/q/*
 // @match        http://qacode.ru/questions/*
 // @match        https://progaide.com/question/*
-// @match        http://stackz.ru/en/*
-// @match        https://www.it-swarm.net/*
+// @match        http://stackz.ru/en/*/*
+// @match        http://stackz.ru/ru/*/*
+// @match        https://www.it-swarm.net/*/*
 // @match        https://bonprog.com/question/*
 // @match        https://bestecode.com/question/*
 // @match        https://progexact.com/question/*
@@ -75,19 +76,48 @@
 // @match        http://v-resheno.ru/*
 // @match        https://v-resheno.ru/*
 // @match        https://src-bin.com/*/q/*
+// @match        https://intellipaat.com/community/*/*
 // ==/UserScript==
 
-function lastPathnamePart() {
-    return location.pathname.split('/').filter(Boolean).slice(-1)[0];
-}
+(async () => {
+    'use strict';
 
-function originalUrl() {
+    function lastPathPart() {
+        return location.pathname.split('/').filter(Boolean).slice(-1)[0];
+    }
+
+    /**
+     * @param {string} q
+     * @param {Date} before
+     */
+    function findByApi(q, before) {
+        return fetch('https://api.stackexchange.com/2.2/search?todate=' + (before.getTime() / 1000 | 0) + '&page=1&pagesize=1&order=desc&sort=relevance&intitle=' + encodeURIComponent(q) + '&site=stackoverflow', { credentials: 'omit' })
+            .then(r => r.json())
+            .then(r => r.items && r.items[0] && r.items[0].link);
+    }
+
+    /**
+     * @param {string} selector
+     */
+    function textContent(selector) {
+        const e = document.querySelector(selector);
+        return e ? e.textContent.trim() || null : null
+    }
+
+    /**
+     * @param {string} s
+     * @param {number} [radix]
+     */
+    function byNumber(s, radix) {
+        const n = parseInt(s, radix);
+        return n > 0 ? 'https://stackoverflow.com/questions/' + n : null;
+    }
+
     if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=1&q=')) {
-        var q = new URLSearchParams(location.search).get('q');
-        var link = q && Array.prototype.slice.call(document.querySelectorAll('.result-link a')).find(function (link) {
+        const q = new URLSearchParams(location.search).get('q');
+        const link = q && Array.prototype.slice.call(document.querySelectorAll('.result-link a'))
             //@ts-ignore
-            return link.href.indexOf('/' + q, 36) !== -1 || link.textContent.trim().endsWith(q);
-        });
+            .find(link => link.href.indexOf('/' + q, 36) !== -1 || link.textContent.trim().replace(/ \[closed\]$/, '').endsWith(q));
         if (link) {
             try {
                 //@ts-ignore
@@ -98,20 +128,21 @@ function originalUrl() {
         }
     }
 
-    var n = 0;
-    var host = location.hostname.split('.').slice(-2).join('.');
+    const host = location.hostname.split('.').slice(-2).join('.');
     switch (host) {
+        case 'intellipaat.com':
+            return findByApi(
+                textContent('h1'),
+                new Date(document.querySelector('.qa-q-view-main time').getAttribute('datetime'))
+            );
         case 'v-resheno.ru':
-            var e = document.querySelector('.linkurl > b');
-            return e ? e.textContent : null
+            return textContent('.linkurl > b');
         case 'src-bin.com':
         case 'i-harness.com':
         case 'code-examples.net':
-            n = parseInt(lastPathnamePart(), 16) || 0;
-            break;
+            return byNumber(lastPathPart(), 16);
         case 'quabr.com':
-            n = parseInt(location.pathname.split('/', 2)[1]) || 0;
-            break;
+            return byNumber(location.pathname.split('/', 2)[1]);
         case 'profikoder.com':
         case 'progexact.com':
         case 'bestecode.com':
@@ -121,71 +152,72 @@ function originalUrl() {
         case 'coredump.biz':
         case 'issue.life':
         case 'xbuba.com':
-            n = parseInt(location.pathname.split('/', 3)[2]) || 0;
-            break;
+            return byNumber(location.pathname.split('/', 3)[2]);
         case 'exceptionshub.com':
             if (!/\.html$/.test(location.pathname)) {
-                break;
+                return;
             }
         case 'codengineering.ru':
         case 'stackanswers.net':
         case 'askvoprosy.com':
-            return 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(lastPathnamePart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, ''));
+            const q = lastPathPart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, '');
+            return q ? 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(q) : null;
         case 'stackz.ru':
-            return 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(document.querySelector('h1').textContent.trim());
+            const enLink = document.querySelector('a[href^="/en/' + location.pathname.split('/', 3)[2] + '/"]');
+            if (enLink) {
+                //@ts-ignore
+                return enLink.href;
+            }
+            const qq = textContent('h1');
+            return qq ? 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(qq) : null;
         case 'codeday.me':
             if (location.hostname.startsWith('publish.')) {
                 //@ts-ignore
                 return document.querySelectorAll('.panel-body a')[1].href;
             }
+        default:
+            const cssSelectors = {
+                'qaru.site': '.question-text > a[href*="stackoverflow.com/questions/"]',
+                'askdev.info': '.question-text > a[href*="stackoverflow.com/questions/"]',
+                'ubuntugeeks.com': '.question-text > a[href*="askubuntu.com/questions/"]',
+
+                'qa-help.ru': 'a.uncolored-text[href*="stackoverflow.com/questions/"]',//встречаются вопросы с ru.stackoverflow.com
+                'programmerz.ru': '.source-share-link',
+                '4answered.com': '.view_body span a',
+                'qna.one': '.page-container-question .source-share-block a',
+                '365airsoft.com': '.origin > a',
+                'codeday.me': '.article-es-url > a',
+                'code-adviser.com': '.meta_data a',
+                'web-answers.ru': '.source > a',
+                'sprosi.pro': '#qsource > a',
+                'overcoder.net': '.info_outlink',
+                'qacode.ru': '.question-info .cc-link',
+                'it-swarm.net': '.gat[data-cat="q-source"]',
+                'rstopup.com': '.td-post-content .origlink > a',
+                'itranslater.com': '.body > div:last-child > a',
+                'voidcc.com': '.source > a',
+
+                'stackru.com': '.q-source',
+                'ask-ubuntu.ru': '.q-source',
+
+                'stackoverrun.com': '.post-meta a',
+                'stackovernet.com': '.post-meta a',
+
+                'kotaeta.com': '.footer_question.mt-3 > a',
+                'ciupacabra.com': '.footer_question.mt-3 > a',
+                'de-vraag.com': '.footer_question.mt-3 > a',
+                'switch-case.ru': '.footer_question.mt-3 > a',
+                'switch-case.com': '.footer_question.mt-3 > a',
+                'es.switch-case.com': '.footer_question.mt-3 > a',
+                'pt.switch-case.com': '.footer_question.mt-3 > a',
+                'de.switch-case.com': '.footer_question.mt-3 > a',
+                'bn.switch-case.com': '.footer_question.mt-3 > a',
+                'ar.switch-case.com': '.footer_question.mt-3 > a',
+                'answer-id.com': '.footer_question.mt-3 > a',
+                'while-do.com': '.footer_question.mt-3 > a'
+            };
+            const link = cssSelectors[host] && document.querySelector(cssSelectors[host]);
+            return link ? link.href : null;
     }
-    if (n > 0) {
-        return 'https://stackoverflow.com/questions/' + n;
-    }
 
-    var m = {
-        'qaru.site': '.question-text > a[href*="stackoverflow.com/questions/"]',
-        'askdev.info': '.question-text > a[href*="stackoverflow.com/questions/"]',
-        'ubuntugeeks.com': '.question-text > a[href*="askubuntu.com/questions/"]',
-
-        'qa-help.ru': 'a.uncolored-text[href*="stackoverflow.com/questions/"]',//встречаются вопросы с ru.stackoverflow.com
-        'programmerz.ru': '.source-share-link',
-        '4answered.com': '.view_body span a',
-        'qna.one': '.page-container-question .source-share-block a',
-        '365airsoft.com': '.origin > a',
-        'codeday.me': '.article-es-url > a',
-        'code-adviser.com': '.meta_data a',
-        'web-answers.ru': '.source > a',
-        'sprosi.pro': '#qsource > a',
-        'overcoder.net': '.info_outlink',
-        'qacode.ru': '.question-info .cc-link',
-        'it-swarm.net': '.gat[data-cat="q-source"]',
-        'rstopup.com': '.td-post-content .origlink > a',
-        'itranslater.com': '.body > div:last-child > a',
-        'voidcc.com': '.source > a',
-
-        'stackru.com': '.q-source',
-        'ask-ubuntu.ru': '.q-source',
-
-        'stackoverrun.com': '.post-meta a',
-        'stackovernet.com': '.post-meta a',
-
-        'kotaeta.com': '.footer_question.mt-3 > a',
-        'ciupacabra.com': '.footer_question.mt-3 > a',
-        'de-vraag.com': '.footer_question.mt-3 > a',
-        'switch-case.ru': '.footer_question.mt-3 > a',
-        'switch-case.com': '.footer_question.mt-3 > a',
-        'es.switch-case.com': '.footer_question.mt-3 > a',
-        'pt.switch-case.com': '.footer_question.mt-3 > a',
-        'de.switch-case.com': '.footer_question.mt-3 > a',
-        'bn.switch-case.com': '.footer_question.mt-3 > a',
-        'ar.switch-case.com': '.footer_question.mt-3 > a',
-        'answer-id.com': '.footer_question.mt-3 > a',
-        'while-do.com': '.footer_question.mt-3 > a'
-    };
-    var link = m[host] && document.querySelector(m[host]);
-    return link ? link.href : null;
-}
-
-var u = originalUrl();
-u && (location.href = u);
+})().then(u => u && (location.href = u)).catch(console.error.bind(console));

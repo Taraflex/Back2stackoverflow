@@ -44,12 +44,13 @@ Supported sites:
 - sprosi.pro
 - askvoprosy.com
 - stackanswers.net
-- codengineering.ru
+- codengineering.ru (broken - ERR_TOO_MANY_REDIRECTS)
 - overcoder.net
 - coderquestion.ru
 - qacode.ru
 - progaide.com
 - stackz.ru/en
+- stackz.ru/ru
 - it-swarm.net
 - bonprog.com
 - bestecode.com
@@ -60,3 +61,4 @@ Supported sites:
 - ru.voidcc.com
 - v-resheno.ru
 - src-bin.com
+- intellipaat.com
