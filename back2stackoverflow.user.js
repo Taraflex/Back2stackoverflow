@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.1.1
+// @version      0.1.2
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -125,10 +125,10 @@
 
     /**
      * @param {string} q
-     * @param {Date} before
+     * @param {Date} [before]
      */
     function findByApi(q, before) {
-        return q && fetch('https://api.stackexchange.com/2.2/search?todate=' + (before.getTime() / 1000 | 0) + '&page=1&pagesize=1&order=desc&sort=relevance&intitle=' + encodeURIComponent(q) + '&site=stackoverflow', { credentials: 'omit' })
+        return q && fetch('https://api.stackexchange.com/2.2/search?page=1&pagesize=1&order=desc&sort=relevance&intitle=' + encodeURIComponent(q) + '&site=stackoverflow' + (before ? '&todate=' + (before.getTime() / 1000 | 0) : ''), { credentials: 'omit' })
             .then(r => r.json())
             .then(r => r.items && r.items[0] && r.items[0].link);
     }
@@ -161,7 +161,7 @@
      * @param {string} s
      */
     function wOnly(s) {
-        return s && s.replace(/[^a-z0-9]/gi, '');
+        return s && s.replace(/\sa\s|\san\s|\sthe\s/g, ' ').replace(/[^a-z0-9]/gi, '');
     }
 
     if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=1&q=')) {
@@ -170,7 +170,7 @@
         // todo compare without punctuation
         const link = q && Array.prototype.slice.call(document.querySelectorAll('.result-link a'))
             //@ts-ignore
-            .find(link => link.href.indexOf('/' + q, 36) !== -1 || wOnly(link.textContent.replace(/ \[closed\]\s*$/, '')).endsWith(qw));
+            .find(link => link.href.indexOf('/' + q, 36) !== -1 || wOnly(link.textContent.replace(/ \[closed|dublicate\]\s*$/, '')).endsWith(qw));
         if (link) {
             try {
                 //@ts-ignore
@@ -185,7 +185,8 @@
     switch (host) {
         case 'askdev.ru':
             if (textContent('.block_share span')) {
-                return toSearch(await yaTranslate(textContent('h1')));
+                const s = textContent('h1');
+                return toSearch(await yaTranslate(s ? s.replace('[дубликат]', '') : s));
             }
             break;
         case 'intellipaat.com':
