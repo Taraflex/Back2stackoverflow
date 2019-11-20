@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.1.0
+// @version      0.1.1
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
 // @downloadURL  https://raw.githubusercontent.com/Taraflex/Back2stackoverflow/master/back2stackoverflow.user.js
 // @updateURL    https://raw.githubusercontent.com/Taraflex/Back2stackoverflow/master/back2stackoverflow.user.js
+// @grant        GM_xmlhttpRequest
 // @match        https://stackoverflow.com/search?back2stackoverflow=1&q=*
 // @match        http://qaru.site/questions/*
 // @match        https://qaru.site/questions/*
@@ -77,10 +78,46 @@
 // @match        https://v-resheno.ru/*
 // @match        https://src-bin.com/*/q/*
 // @match        https://intellipaat.com/community/*/*
+// @match        https://askdev.ru/q/*
 // ==/UserScript==
 
 (async () => {
     'use strict';
+
+    /**
+     * @param {string} q
+     */
+    async function yaTranslate(q) {
+        if (!q) {
+            return null;
+        }
+        q = 'https://api.browser.yandex.ru/dictionary/translate?statLang=en&targetLang=en&text=' + encodeURIComponent(q)
+        try {
+            //dosn't work in chrome
+            return await fetch(q, { mode: 'no-cors', credentials: 'omit' })
+                .then(r => r.json())
+                .then(r => r.text);
+        } catch (e) {
+            console.error(e);
+            //works only in tampermonkey
+            return new Promise((resolve, reject) => {
+                //@ts-ignore
+                GM_xmlhttpRequest({
+                    url: q,
+                    responseType: 'json',
+                    anonymous: true,
+                    onload: (xhr) => {
+                        if (xhr.status === 200) {
+                            resolve(xhr.response.text)
+                        } else {
+                            reject(xhr)
+                        }
+                    },
+                    onerror: reject
+                })
+            })
+        }
+    }
 
     function lastPathPart() {
         return location.pathname.split('/').filter(Boolean).slice(-1)[0];
@@ -91,7 +128,7 @@
      * @param {Date} before
      */
     function findByApi(q, before) {
-        return fetch('https://api.stackexchange.com/2.2/search?todate=' + (before.getTime() / 1000 | 0) + '&page=1&pagesize=1&order=desc&sort=relevance&intitle=' + encodeURIComponent(q) + '&site=stackoverflow', { credentials: 'omit' })
+        return q && fetch('https://api.stackexchange.com/2.2/search?todate=' + (before.getTime() / 1000 | 0) + '&page=1&pagesize=1&order=desc&sort=relevance&intitle=' + encodeURIComponent(q) + '&site=stackoverflow', { credentials: 'omit' })
             .then(r => r.json())
             .then(r => r.items && r.items[0] && r.items[0].link);
     }
@@ -106,6 +143,13 @@
 
     /**
      * @param {string} s
+     */
+    function toSearch(s) {
+        return s ? 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(s) : null;
+    }
+
+    /**
+     * @param {string} s
      * @param {number} [radix]
      */
     function byNumber(s, radix) {
@@ -113,11 +157,20 @@
         return n > 0 ? 'https://stackoverflow.com/questions/' + n : null;
     }
 
+    /**
+     * @param {string} s
+     */
+    function wOnly(s) {
+        return s && s.replace(/[^a-z0-9]/gi, '');
+    }
+
     if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=1&q=')) {
         const q = new URLSearchParams(location.search).get('q');
+        const qw = wOnly(q);
+        // todo compare without punctuation
         const link = q && Array.prototype.slice.call(document.querySelectorAll('.result-link a'))
             //@ts-ignore
-            .find(link => link.href.indexOf('/' + q, 36) !== -1 || link.textContent.trim().replace(/ \[closed\]$/, '').endsWith(q));
+            .find(link => link.href.indexOf('/' + q, 36) !== -1 || wOnly(link.textContent.replace(/ \[closed\]\s*$/, '')).endsWith(qw));
         if (link) {
             try {
                 //@ts-ignore
@@ -130,6 +183,11 @@
 
     const host = location.hostname.split('.').slice(-2).join('.');
     switch (host) {
+        case 'askdev.ru':
+            if (textContent('.block_share span')) {
+                return toSearch(await yaTranslate(textContent('h1')));
+            }
+            break;
         case 'intellipaat.com':
             return findByApi(
                 textContent('h1'),
@@ -156,20 +214,18 @@
         case 'exceptionshub.com':
             if (!/\.html$/.test(location.pathname)) {
                 return;
-            }
+            }//отсутствие break - не ошибка
         case 'codengineering.ru':
         case 'stackanswers.net':
         case 'askvoprosy.com':
-            const q = lastPathPart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, '');
-            return q ? 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(q) : null;
+            return toSearch(lastPathPart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, ''));
         case 'stackz.ru':
             const enLink = document.querySelector('a[href^="/en/' + location.pathname.split('/', 3)[2] + '/"]');
             if (enLink) {
                 //@ts-ignore
                 return enLink.href;
             }
-            const qq = textContent('h1');
-            return qq ? 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(qq) : null;
+            return toSearch(textContent('h1'));
         case 'codeday.me':
             if (location.hostname.startsWith('publish.')) {
                 //@ts-ignore

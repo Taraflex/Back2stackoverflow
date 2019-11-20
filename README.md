@@ -62,3 +62,4 @@ Supported sites:
 - v-resheno.ru
 - src-bin.com
 - intellipaat.com
+- askdev.ru
