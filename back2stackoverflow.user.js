@@ -167,7 +167,6 @@
     if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=1&q=')) {
         const q = new URLSearchParams(location.search).get('q');
         const qw = wOnly(q);
-        // todo compare without punctuation
         const link = q && Array.prototype.slice.call(document.querySelectorAll('.result-link a'))
             //@ts-ignore
             .find(link => link.href.indexOf('/' + q, 36) !== -1 || wOnly(link.textContent.replace(/ \[closed|dublicate\]\s*$/, '')).endsWith(qw));
