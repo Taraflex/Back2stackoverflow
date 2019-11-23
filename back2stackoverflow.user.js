@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name         back2stackoverflow
-// @version      0.1.3
+// @name         Back2stackoverflow
+// @version      0.1.4
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
 // @downloadURL  https://raw.githubusercontent.com/Taraflex/Back2stackoverflow/master/back2stackoverflow.user.js
 // @updateURL    https://raw.githubusercontent.com/Taraflex/Back2stackoverflow/master/back2stackoverflow.user.js
 // @grant        GM_xmlhttpRequest
-// @match        https://stackoverflow.com/search?back2stackoverflow=1&q=*
+// @match        https://stackoverflow.com/search?back2stackoverflow=*
 // @match        http://qaru.site/questions/*
 // @match        https://qaru.site/questions/*
 // @match        http://askdev.info/questions/*
@@ -79,26 +79,83 @@
 // @match        https://src-bin.com/*/q/*
 // @match        https://intellipaat.com/community/*/*
 // @match        https://askdev.ru/q/*
+// @match        https://vike.io/*/*/*
 // ==/UserScript==
 
 (async () => {
     'use strict';
 
     /**
+     * @param {string} bgcolor
+     * @param {string} link
+     */
+    async function promtRedirect(bgcolor, link) {
+        const dialog = document.createElement('div');
+        try {
+            document.body.appendChild(dialog);
+            const shadowRoot = dialog.attachShadow ?
+                dialog.attachShadow({ mode: 'open' }) :
+                //@ts-ignore
+                dialog.createShadowRoot && dialog.createShadowRoot();
+            if (!shadowRoot) {
+                throw 'Shadow dom required!';
+            }
+            shadowRoot.innerHTML = `
+<style>
+:host{
+    position: fixed;
+    bottom: 0;
+    z-index: 16777271; 
+    width: 100%; 
+    color: white;
+    background-color: ${bgcolor};
+}
+.m{
+    padding: 14px;
+    font-family: Ubuntu,Segoe UI,Optima,Trebuchet MS,-apple-system,BlinkMacSystemFont,sans-serif;
+    font-size: 14px;
+}
+#close-btn{
+    float: right;
+    cursor: pointer;
+}
+a{
+    color: white;
+}
+.search-icon{
+    font-size: 24px;
+    line-height: 0;
+    text-decoration: none;
+}
+</style>
+<div class="m">[ Back2stackoverflow ] <a id="ok-btn" href="#">Try to find the original question?<a href="#" class="search-icon"> ⌕<a></a><span id="close-btn">✖</button></span>`;
+            shadowRoot.querySelector('#ok-btn').href = shadowRoot.querySelector('.search-icon').href = link;
+            await new Promise((_, reject) => {
+                //shadowRoot.querySelector('#ok-btn').addEventListener('click', reject);
+                shadowRoot.querySelector('#close-btn').addEventListener('click', reject);
+            });
+        } finally {
+            document.body.removeChild(dialog);
+        }
+    }
+
+    /**
      * @param {string} q
      */
     async function yaTranslate(q) {
+        q = dropMarks(q);
         if (!q) {
             return null;
         }
+        //todo гугл переводчик вставляет пробелы где не нужно, исследовать вокруг каких знаков стоит удалять пробелы
+        q = q.replace(/ \/ /g, '/');
         q = 'https://api.browser.yandex.ru/dictionary/translate?statLang=en&targetLang=en&text=' + encodeURIComponent(q)
         try {
             //dosn't work in chrome
             return await fetch(q, { mode: 'no-cors', credentials: 'omit' })
                 .then(r => r.json())
                 .then(r => r.text);
-        } catch (e) {
-            console.error(e);
+        } catch (_) {
             //works only in tampermonkey
             return new Promise((resolve, reject) => {
                 //@ts-ignore
@@ -130,10 +187,11 @@
      * @param {string[]} [tags]
      */
     function findByApi(q, before, after, tags) {
+        q = dropMarks(q);
         return q && fetch(
             `https://api.stackexchange.com/2.2/search?page=1&pagesize=1&order=desc&sort=relevance&intitle=${encodeURIComponent(q)}&site=stackoverflow` +
-            (after ? '&fromdate=' + (after.getTime() / 1000 - 1 | 0) : '') +
-            (before ? '&todate=' + (before.getTime() / 1000 + 1 | 0) : '') +
+            (after ? '&fromdate=' + (after.getTime() / 1000 - 120 | 0) : '') +
+            (before ? '&todate=' + (before.getTime() / 1000 + 120 | 0) : '') +
             (Array.isArray(tags) && tags.length > 0 ? '&tagged=' + tags.join(';') : '')
             , { credentials: 'omit' })
             .then(r => r.json())
@@ -153,6 +211,7 @@
      * @param {boolean} [real]
      */
     function toSearch(s, real) {
+        s = dropMarks(s);
         return s ? `https://stackoverflow.com/search?back2stackoverflow=${+!!real}&q=` + encodeURIComponent(s) : null;
     }
 
@@ -166,10 +225,18 @@
     }
 
     /**
+    * @param {string} s
+    */
+    function dropMarks(s) {
+        //todo closed in other langs
+        return s && s.replace(/\[(duplikować|duplicado|duplicar|duplikat|dublicate|duplicate|дубликат|закрыто|closed)\]\s*$/i, '').trim();
+    }
+
+    /**
      * @param {string} s
      */
     function normalize(s) {
-        return s && ' ' + s.toLowerCase().replace(/ \[closed|dublicate\]\s*$/, '') + ' '
+        return s && ' ' + s.toLowerCase() + ' '
     }
 
     let auxiliaryRe = null;
@@ -180,7 +247,8 @@
         return s && s.replace(auxiliaryRe || (auxiliaryRe = new RegExp([
             'a', 'an', 'the',
             //Conjunctions http://englishgu.ru/soyuzyi-v-angliyskom-yazyike-tablitsa-spisok/
-            'according to', 'against', 'also', 'although', 'and', 'as', 'as far as', 'as if', 'as long as', 'as soon as', 'as though', 'as well as', 'at last', 'at least', 'because', 'because of', 'beyond', 'both', 'but', 'either', 'for', 'from now on', 'from time to time', 'however', 'if', 'in case', 'in order', 'in spite of', 'in terms of', 'like', 'meanwhile', 'moreover', 'neither', 'nevertheless', 'no matter how', 'no matter what', 'no matter when', 'no matter where', 'no matter who', 'no matter why', 'nor', 'not so as', 'not yet', 'now that', 'on behalf of', 'on condition', 'on the contrary', 'on the other hand', 'once', 'or', 'otherwise', 'owing to', 'so', 'still', 'than', 'that', 'that is why', 'therefore', 'thus', 'unless', 'unlike', 'what', 'whereas', 'whether', 'while', 'with', 'within', 'without', 'yet',
+            //https://7esl.com/english-conjunctions/
+            'according to', 'after', 'against', 'also', 'although', 'and', 'as far as', 'as if', 'as long as', 'as much as', 'as soon as', 'as though', 'as well as', 'as', 'assuming that', 'at last', 'at least', 'because of', 'because', 'before', 'beyond', 'both', 'but', 'by the time', 'either', 'even if', 'even though', 'for', 'from now on', 'from time to time', 'how', 'however', 'if', 'in case', 'in order', 'in spite of', 'in terms of', 'lest', 'like', 'meanwhile', 'moreover', 'neither', 'nevertheless', 'no matter how', 'no matter what', 'no matter when', 'no matter where', 'no matter who', 'no matter why', 'nor', 'not so as', 'not yet', 'now that', 'on behalf of', 'on condition', 'on the contrary', 'on the other hand', 'once', 'only if', 'or', 'otherwise', 'owing to', 'provided that', 'rather than', 'since', 'so that', 'so', 'still', 'than', 'that is why', 'that', 'therefore', 'though', 'thus', 'till', 'unless', 'unlike', 'until', 'what', 'whatever', 'when', 'whenever', 'where', 'whereas', 'wherever', 'whether', 'which', 'whichever', 'while', 'who', 'whoever', 'whom', 'whomever', 'whose', 'with', 'within', 'without', 'yet',
             //some of Preposition https://www.englishclub.com/grammar/prepositions-list.htm
             //https://www.talkenglish.com/vocabulary/top-50-prepositions.aspx
             'aboard', 'about', 'above', 'across', 'after', 'against', 'along', 'amid', 'among', 'anti', 'around', 'at', 'behind', 'below', 'beneath', 'beside', 'besides', 'beyond', 'but', 'by', 'concerning', 'considering', 'despite', 'down', 'during', 'excepting', 'excluding', 'following', 'for', 'from', 'in', 'including', 'inside', 'into', 'of', 'off', 'on', 'onto', 'opposite', 'out', 'outside', 'over', 'past', 'per', 'regarding', 'since', 'than', 'through', 'throughout', 'to', 'toward', 'towards', 'under', 'underneath', 'unlike', 'until', 'up', 'upon', 'versus', 'via', 'within', 'without',
@@ -199,32 +267,41 @@
     }
 
     /**
-    * @param {string} s
-    */
-    function trim(s) {
-        return s && s.trim();
-    }
-
-    /**
      * @param {Function[]} fns
      */
     function pipe(...fns) {
         return (v) => {
-            for (const f of fns) {
+            for (let f of fns) {
                 v = f(v);
             }
             return v;
         }
     }
 
+    /**
+     * @param {string} s
+     * @return {HTMLElement[]}
+     */
+    function all(s) {
+        return Array.prototype.slice.call(document.querySelectorAll(s));
+    }
+
+    /**
+     * @param {string} s
+     * @return {string[]}
+     */
+    function allTexts(s) {
+        return all(s).map(a => a.textContent.trim())
+    }
+
     if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=')) {
         const searchParams = new URLSearchParams(location.search);
-        const prepare = +searchParams.get('back2stackoverflow') ? pipe(normalize, onlyAlphanum) : pipe(normalize, removeAuxiliary, onlyAlphanum);
+        const prepare = +searchParams.get('back2stackoverflow') ? pipe(dropMarks, normalize, onlyAlphanum) : pipe(dropMarks, normalize, removeAuxiliary, onlyAlphanum);
         const q = searchParams.get('q');
         const preparedQ = prepare(q);
-        const link = preparedQ && Array.prototype.slice.call(document.querySelectorAll('.result-link a'))
+        const link = preparedQ && all('.result-link a')
             //@ts-ignore
-            .find(link => link.href.indexOf('/' + q, 36) !== -1 || console.log(prepare(link.textContent)) || prepare(link.textContent).endsWith(preparedQ));
+            .find(link => link.href.indexOf('/' + q, 36) !== -1 || preparedQ.startsWith(prepare(link.textContent.replace(/^\s*(Q|A):/, ''))));
         if (link) {
             try {
                 //@ts-ignore
@@ -238,18 +315,26 @@
     const host = location.hostname.split('.').slice(-2).join('.');
     switch (host) {
         case 'askdev.ru':
-            if (textContent('.block_share span')) {
-                const s = textContent('h1');
-                return s && pipe(normalize, trim, toSearch)(await yaTranslate(s.replace('[дубликат]', '')));
+            let s = textContent('.block_share span') ? textContent('h1') : null;
+            if (s) {
+                s = await yaTranslate(s);
+                return (await findByApi(s, null, null, allTexts('.block_taxonomies a'))) || promtRedirect('#970f1b', toSearch(s));
             }
-            break;
+            return;
+        case 'vike.io':
+            let title = textContent('h1');
+            if (title) {
+                title = await yaTranslate(title.replace(/[^–]+–\s/, ''));
+                const d = new Date(document.querySelector('.question-box .author__date').getAttribute('datetime'));
+                return (await findByApi(title, d, d, allTexts('.tags__item--blue'))) || promtRedirect('#09c199', toSearch(title));
+            }
+            return;
         case 'intellipaat.com':
-            //todo use tags
             return findByApi(
                 textContent('h1'),
                 new Date(document.querySelector('.qa-q-view-main time').getAttribute('datetime')),
                 null,
-                Array.prototype.slice.call(document.querySelectorAll('.qa-q-view-main .qa-tag-link')).map(a => a.textContent.trim())
+                allTexts('.qa-q-view-main .qa-tag-link')
             );
         case 'v-resheno.ru':
             return textContent('.linkurl > b');
@@ -276,7 +361,7 @@
         case 'codengineering.ru':
         case 'stackanswers.net':
         case 'askvoprosy.com':
-            return toSearch(lastPathPart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, ''), true);
+            return toSearch(lastPathPart().replace(/(-closed|-duplicate)?(-\d+)?(\.html)?$/, ''), true);
         case 'stackz.ru':
             const enLink = document.querySelector('a[href^="/en/' + location.pathname.split('/', 3)[2] + '/"]');
             if (enLink) {
@@ -287,7 +372,7 @@
         case 'codeday.me':
             if (location.hostname.startsWith('publish.')) {
                 //@ts-ignore
-                return document.querySelectorAll('.panel-body a')[1].href;
+                return all('.panel-body a')[1].href;
             }
         default:
             const cssSelectors = {

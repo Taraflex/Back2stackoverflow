@@ -63,5 +63,6 @@ Supported sites:
 - src-bin.com
 - intellipaat.com
 
-Partially supported sites (Yandex Translate is used to find the original question)
+Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
+- vike.io
