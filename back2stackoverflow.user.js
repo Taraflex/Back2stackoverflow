@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.5
+// @version      0.1.6
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -230,8 +230,7 @@ a{
     * @param {string} s
     */
     function dropMarks(s) {
-        //todo closed in other langs
-        return s && s.replace(/\[(duplikować|duplicado|duplicar|duplikat|dublicate|duplicate|дубликат|закрыто|closed)\]\s*$/i, '').trim();
+        return s && s.replace(/\[(duplikować|duplicado|duplicar|duplikat|dublicate|duplicate|дубликат|закрыто|closed|geschlossen|zamknięte|cerrado)\]\s*$/i, '').trim();
     }
 
     /**
