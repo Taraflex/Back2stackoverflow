@@ -62,4 +62,6 @@ Supported sites:
 - v-resheno.ru
 - src-bin.com
 - intellipaat.com
+
+Partially supported sites (Yandex Translate is used to find the original question)
 - askdev.ru

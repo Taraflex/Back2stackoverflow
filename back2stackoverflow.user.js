@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         back2stackoverflow
-// @version      0.1.2
+// @version      0.1.3
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -126,9 +126,16 @@
     /**
      * @param {string} q
      * @param {Date} [before]
+     * @param {Date} [after]
+     * @param {string[]} [tags]
      */
-    function findByApi(q, before) {
-        return q && fetch('https://api.stackexchange.com/2.2/search?page=1&pagesize=1&order=desc&sort=relevance&intitle=' + encodeURIComponent(q) + '&site=stackoverflow' + (before ? '&todate=' + (before.getTime() / 1000 | 0) : ''), { credentials: 'omit' })
+    function findByApi(q, before, after, tags) {
+        return q && fetch(
+            `https://api.stackexchange.com/2.2/search?page=1&pagesize=1&order=desc&sort=relevance&intitle=${encodeURIComponent(q)}&site=stackoverflow` +
+            (after ? '&fromdate=' + (after.getTime() / 1000 - 1 | 0) : '') +
+            (before ? '&todate=' + (before.getTime() / 1000 + 1 | 0) : '') +
+            (Array.isArray(tags) && tags.length > 0 ? '&tagged=' + tags.join(';') : '')
+            , { credentials: 'omit' })
             .then(r => r.json())
             .then(r => r.items && r.items[0] && r.items[0].link);
     }
@@ -143,9 +150,10 @@
 
     /**
      * @param {string} s
+     * @param {boolean} [real]
      */
-    function toSearch(s) {
-        return s ? 'https://stackoverflow.com/search?back2stackoverflow=1&q=' + encodeURIComponent(s) : null;
+    function toSearch(s, real) {
+        return s ? `https://stackoverflow.com/search?back2stackoverflow=${+!!real}&q=` + encodeURIComponent(s) : null;
     }
 
     /**
@@ -160,16 +168,63 @@
     /**
      * @param {string} s
      */
-    function wOnly(s) {
-        return s && s.replace(/\sa\s|\san\s|\sthe\s/g, ' ').replace(/[^a-z0-9]/gi, '');
+    function normalize(s) {
+        return s && ' ' + s.toLowerCase().replace(/ \[closed|dublicate\]\s*$/, '') + ' '
     }
 
-    if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=1&q=')) {
-        const q = new URLSearchParams(location.search).get('q');
-        const qw = wOnly(q);
-        const link = q && Array.prototype.slice.call(document.querySelectorAll('.result-link a'))
+    let auxiliaryRe = null;
+    /**
+     * @param {string} s
+     */
+    function removeAuxiliary(s) {
+        return s && s.replace(auxiliaryRe || (auxiliaryRe = new RegExp([
+            'a', 'an', 'the',
+            //Conjunctions http://englishgu.ru/soyuzyi-v-angliyskom-yazyike-tablitsa-spisok/
+            'according to', 'against', 'also', 'although', 'and', 'as', 'as far as', 'as if', 'as long as', 'as soon as', 'as though', 'as well as', 'at last', 'at least', 'because', 'because of', 'beyond', 'both', 'but', 'either', 'for', 'from now on', 'from time to time', 'however', 'if', 'in case', 'in order', 'in spite of', 'in terms of', 'like', 'meanwhile', 'moreover', 'neither', 'nevertheless', 'no matter how', 'no matter what', 'no matter when', 'no matter where', 'no matter who', 'no matter why', 'nor', 'not so as', 'not yet', 'now that', 'on behalf of', 'on condition', 'on the contrary', 'on the other hand', 'once', 'or', 'otherwise', 'owing to', 'so', 'still', 'than', 'that', 'that is why', 'therefore', 'thus', 'unless', 'unlike', 'what', 'whereas', 'whether', 'while', 'with', 'within', 'without', 'yet',
+            //some of Preposition https://www.englishclub.com/grammar/prepositions-list.htm
+            //https://www.talkenglish.com/vocabulary/top-50-prepositions.aspx
+            'aboard', 'about', 'above', 'across', 'after', 'against', 'along', 'amid', 'among', 'anti', 'around', 'at', 'behind', 'below', 'beneath', 'beside', 'besides', 'beyond', 'but', 'by', 'concerning', 'considering', 'despite', 'down', 'during', 'excepting', 'excluding', 'following', 'for', 'from', 'in', 'including', 'inside', 'into', 'of', 'off', 'on', 'onto', 'opposite', 'out', 'outside', 'over', 'past', 'per', 'regarding', 'since', 'than', 'through', 'throughout', 'to', 'toward', 'towards', 'under', 'underneath', 'unlike', 'until', 'up', 'upon', 'versus', 'via', 'within', 'without',
+            //some of https://7esl.com/interjections-exclamations/
+            'aah', 'ah', 'aha', 'ahem', 'alas', 'argh', 'aw', 'aww', 'bah', 'behold', 'bingo', 'boo', 'bravo', 'brr', 'dear', 'duh', 'eek', 'eh', 'er', 'eww', 'gah', 'gee', 'grr', 'hah', 'hello', 'hey', 'hi', 'hmm', 'huh', 'hullo', 'humph', 'hurrah', 'meh', 'mhm', 'muahaha', 'nuh-uh', 'oh', 'ooh', 'ooh-la-la', 'oomph', 'oops', 'ouch', 'oww', 'oy', 'pew', 'pff', 'phew', 'psst', 'sheesh', 'shh', 'shoo', 'tsk-tsk', 'uh-hu', 'uh-oh', 'uh-uh', 'uhh', 'um', 'umm', 'wee', 'well', 'whoa', 'wow', 'yahoo', 'yay', 'yeah', 'yikes', 'yippee', 'yoo-hoo', 'yuck', 'yuh-uh', 'zing',
+            //modals
+            'can', 'could', 'be able to', 'may', 'might', 'shall', 'should', 'must', 'have to', 'will', 'would',
+        ].sort((a, b) => b.length - a.length).map(w => `\\W${w}(?!\\w)`).join('|'), 'g')), ' ');
+    }
+
+    /**
+    * @param {string} s
+    */
+    function onlyAlphanum(s) {
+        return s && s.replace(/[^a-z0-9]+/gi, '');
+    }
+
+    /**
+    * @param {string} s
+    */
+    function trim(s) {
+        return s && s.trim();
+    }
+
+    /**
+     * @param {Function[]} fns
+     */
+    function pipe(...fns) {
+        return (v) => {
+            for (const f of fns) {
+                v = f(v);
+            }
+            return v;
+        }
+    }
+
+    if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=')) {
+        const searchParams = new URLSearchParams(location.search);
+        const prepare = +searchParams.get('back2stackoverflow') ? pipe(normalize, onlyAlphanum) : pipe(normalize, removeAuxiliary, onlyAlphanum);
+        const q = searchParams.get('q');
+        const preparedQ = prepare(q);
+        const link = preparedQ && Array.prototype.slice.call(document.querySelectorAll('.result-link a'))
             //@ts-ignore
-            .find(link => link.href.indexOf('/' + q, 36) !== -1 || wOnly(link.textContent.replace(/ \[closed|dublicate\]\s*$/, '')).endsWith(qw));
+            .find(link => link.href.indexOf('/' + q, 36) !== -1 || console.log(prepare(link.textContent)) || prepare(link.textContent).endsWith(preparedQ));
         if (link) {
             try {
                 //@ts-ignore
@@ -185,13 +240,16 @@
         case 'askdev.ru':
             if (textContent('.block_share span')) {
                 const s = textContent('h1');
-                return toSearch(await yaTranslate(s ? s.replace('[дубликат]', '') : s));
+                return s && pipe(normalize, trim, toSearch)(await yaTranslate(s.replace('[дубликат]', '')));
             }
             break;
         case 'intellipaat.com':
+            //todo use tags
             return findByApi(
                 textContent('h1'),
-                new Date(document.querySelector('.qa-q-view-main time').getAttribute('datetime'))
+                new Date(document.querySelector('.qa-q-view-main time').getAttribute('datetime')),
+                null,
+                Array.prototype.slice.call(document.querySelectorAll('.qa-q-view-main .qa-tag-link')).map(a => a.textContent.trim())
             );
         case 'v-resheno.ru':
             return textContent('.linkurl > b');
@@ -218,14 +276,14 @@
         case 'codengineering.ru':
         case 'stackanswers.net':
         case 'askvoprosy.com':
-            return toSearch(lastPathPart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, ''));
+            return toSearch(lastPathPart().replace(/(-duplicate)?(-\d+)?(\.html)?$/, ''), true);
         case 'stackz.ru':
             const enLink = document.querySelector('a[href^="/en/' + location.pathname.split('/', 3)[2] + '/"]');
             if (enLink) {
                 //@ts-ignore
                 return enLink.href;
             }
-            return toSearch(textContent('h1'));
+            return toSearch(textContent('h1'), true);
         case 'codeday.me':
             if (location.hostname.startsWith('publish.')) {
                 //@ts-ignore
