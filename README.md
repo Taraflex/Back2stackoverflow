@@ -62,6 +62,7 @@ Supported sites:
 - v-resheno.ru
 - src-bin.com
 - intellipaat.com
+- oipapio.com
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru

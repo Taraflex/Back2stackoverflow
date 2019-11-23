@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.4
+// @version      0.1.5
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -78,6 +78,8 @@
 // @match        https://v-resheno.ru/*
 // @match        https://src-bin.com/*/q/*
 // @match        https://intellipaat.com/community/*/*
+// @match        https://oipapio.com/question-*
+// @match        https://www.oipapio.com/question-*
 // @match        https://askdev.ru/q/*
 // @match        https://vike.io/*/*/*
 // ==/UserScript==
@@ -192,7 +194,7 @@ a{
             `https://api.stackexchange.com/2.2/search?page=1&pagesize=1&order=desc&sort=relevance&intitle=${encodeURIComponent(q)}&site=stackoverflow` +
             (after ? '&fromdate=' + (after.getTime() / 1000 - 120 | 0) : '') +
             (before ? '&todate=' + (before.getTime() / 1000 + 120 | 0) : '') +
-            (Array.isArray(tags) && tags.length > 0 ? '&tagged=' + tags.join(';') : '')
+            (Array.isArray(tags) && tags.length > 0 ? '&tagged=' + encodeURIComponent(tags.join(';')) : '')
             , { credentials: 'omit' })
             .then(r => r.json())
             .then(r => r.items && r.items[0] && r.items[0].link);
@@ -315,18 +317,18 @@ a{
     const host = location.hostname.split('.').slice(-2).join('.');
     switch (host) {
         case 'askdev.ru':
-            let s = textContent('.block_share span') ? textContent('h1') : null;
-            if (s) {
-                s = await yaTranslate(s);
-                return (await findByApi(s, null, null, allTexts('.block_taxonomies a'))) || promtRedirect('#970f1b', toSearch(s));
+            let askdev = textContent('.block_share span') ? textContent('h1') : null;
+            if (askdev) {
+                askdev = await yaTranslate(askdev);
+                return (await findByApi(askdev, null, null, allTexts('.block_taxonomies a'))) || promtRedirect('#970f1b', toSearch(askdev));
             }
             return;
         case 'vike.io':
-            let title = textContent('h1');
-            if (title) {
-                title = await yaTranslate(title.replace(/[^–]+–\s/, ''));
+            let vike = textContent('h1');
+            if (vike) {
+                vike = await yaTranslate(vike.replace(/[^–]+–\s/, ''));
                 const d = new Date(document.querySelector('.question-box .author__date').getAttribute('datetime'));
-                return (await findByApi(title, d, d, allTexts('.tags__item--blue'))) || promtRedirect('#09c199', toSearch(title));
+                return (await findByApi(vike, d, d, allTexts('.tags__item--blue'))) || promtRedirect('#09c199', toSearch(vike));
             }
             return;
         case 'intellipaat.com':
@@ -336,6 +338,10 @@ a{
                 null,
                 allTexts('.qa-q-view-main .qa-tag-link')
             );
+        case 'oipapio.com':
+            const oipapio = textContent('h1').split(' - ');
+            const tag = oipapio.shift();
+            return findByApi(oipapio.join(' - '), null, null, [tag]);
         case 'v-resheno.ru':
             return textContent('.linkurl > b');
         case 'src-bin.com':
