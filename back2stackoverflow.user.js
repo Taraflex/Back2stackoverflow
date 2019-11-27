@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.7
+// @version      0.1.8
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -81,6 +81,8 @@
 // @match        https://oipapio.com/question-*
 // @match        https://www.oipapio.com/question-*
 // @match        https://qarus.ru/*
+// @match        https://quick-geek.github.io/answers/*
+// @match        https://weekly-geekly.github.io/articles/*
 // @match        https://askdev.ru/q/*
 // @match        https://vike.io/*/*/*
 // ==/UserScript==
@@ -296,7 +298,9 @@ a{
         return all(s).map(a => a.textContent.trim())
     }
 
-    if (location.href.startsWith('https://stackoverflow.com/search?back2stackoverflow=')) {
+    const href = location.href;
+
+    if (href.startsWith('https://stackoverflow.com/search?back2stackoverflow=')) {
         const searchParams = new URLSearchParams(location.search);
         const prepare = +searchParams.get('back2stackoverflow') ? pipe(dropMarks, normalize, onlyAlphanum) : pipe(dropMarks, normalize, removeAuxiliary, onlyAlphanum);
         const q = searchParams.get('q');
@@ -312,6 +316,8 @@ a{
             //@ts-ignore
             return link.href;
         }
+    } else if (href.startsWith('https://weekly-geekly.github.io/articles/')) {
+        return document.querySelector('a[href^="https://habr.com/ru/post/"]');
     }
 
     const host = location.hostname.split('.').slice(-2).join('.');
@@ -402,6 +408,7 @@ a{
                 'itranslater.com': '.body > div:last-child > a',
                 'voidcc.com': '.source > a',
                 'qarus.ru': 'em > a',
+                /*'quick-geek.github.io'*/ 'github.io': '.question-hyperlink',
 
                 'stackru.com': '.q-source',
                 'ask-ubuntu.ru': '.q-source',
