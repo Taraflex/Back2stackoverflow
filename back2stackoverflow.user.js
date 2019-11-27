@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.6
+// @version      0.1.7
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -80,6 +80,7 @@
 // @match        https://intellipaat.com/community/*/*
 // @match        https://oipapio.com/question-*
 // @match        https://www.oipapio.com/question-*
+// @match        https://qarus.ru/*
 // @match        https://askdev.ru/q/*
 // @match        https://vike.io/*/*/*
 // ==/UserScript==
@@ -400,6 +401,7 @@ a{
                 'rstopup.com': '.td-post-content .origlink > a',
                 'itranslater.com': '.body > div:last-child > a',
                 'voidcc.com': '.source > a',
+                'qarus.ru': 'em > a',
 
                 'stackru.com': '.q-source',
                 'ask-ubuntu.ru': '.q-source',
