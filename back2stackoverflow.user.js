@@ -10,6 +10,7 @@
 // @homepageURL  https://github.com/Taraflex/Back2stackoverflow
 // @supportURL   https://github.com/Taraflex/Back2stackoverflow/issues
 // @grant        GM_xmlhttpRequest
+// @noframes
 // @match        https://stackoverflow.com/search?back2stackoverflow=*
 // @match        http://qaru.site/questions/*
 // @match        https://qaru.site/questions/*
@@ -92,6 +93,8 @@
 // @match        https://www.uwenku.com/question/*
 // @match        https://www.soinside.com/question/*
 // @match        https://qa.1r1g.com/sf/ask/*
+// @match        https://icode9.com/*
+// @match        https://www.icode9.com/*
 // ==/UserScript==
 
 (async () => {
@@ -365,6 +368,8 @@ a{
             const oipapio = textContent('h1').split(' - ');
             const tag = oipapio.shift();
             return findByApi(oipapio.join(' - '), null, null, [tag]);
+        case 'icode9.com':
+            return textContent('#paragraph > p:last-child').split('来源：', 2)[1].trim();
         case 'v-resheno.ru':
             return textContent('.linkurl > b');
         case 'src-bin.com':

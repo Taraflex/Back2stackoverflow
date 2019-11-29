@@ -66,6 +66,7 @@ Supported sites:
 - qarus.ru
 - quick-geek.github.io
 - uwenku.com
+- icode9.com
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
