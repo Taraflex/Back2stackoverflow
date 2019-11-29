@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.9
+// @version      0.1.10
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -88,6 +88,7 @@
 // @match        http://www.uwenku.com/question/*
 // @match        https://www.uwenku.com/question/*
 // @match        https://www.soinside.com/question/*
+// @match        https://qa.1r1g.com/sf/ask/*
 // ==/UserScript==
 
 (async () => {
@@ -346,11 +347,10 @@ a{
             return;
         case 'soinside.com':
             const soinside = await yaTranslate(textContent('h1'), 'zh');
-            console.log(soinside, textContent('h1'))
-            if (soinside) {
-                return (await findByApi(soinside, null, null, allTexts('.q-tag'))) || promtRedirect('#007bff', toSearch(soinside));
-            }
-            return;
+            return soinside && ((await findByApi(soinside, null, null, allTexts('.q-tag'))) || promtRedirect('#007bff', toSearch(soinside)));
+        case '1r1g.com':
+            const qa1r1g = await yaTranslate(textContent('h1'), 'zh');
+            return qa1r1g && ((await findByApi(qa1r1g, null, null, allTexts('.badge'))) || promtRedirect('#343a40', toSearch(qa1r1g)));
         case 'intellipaat.com':
             return findByApi(
                 textContent('h1'),

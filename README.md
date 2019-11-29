@@ -71,3 +71,4 @@ Partially supported sites (Yandex Translate is used to find the original questio
 - askdev.ru
 - vike.io
 - soinside.com
+- qa.1r1g.com
