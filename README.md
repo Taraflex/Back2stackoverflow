@@ -65,7 +65,9 @@ Supported sites:
 - oipapio.com
 - qarus.ru
 - quick-geek.github.io
+- uwenku.com
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
 - vike.io
+- soinside.com

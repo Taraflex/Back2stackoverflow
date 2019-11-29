@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.8
+// @version      0.1.9
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -85,6 +85,9 @@
 // @match        https://weekly-geekly.github.io/articles/*
 // @match        https://askdev.ru/q/*
 // @match        https://vike.io/*/*/*
+// @match        http://www.uwenku.com/question/*
+// @match        https://www.uwenku.com/question/*
+// @match        https://www.soinside.com/question/*
 // ==/UserScript==
 
 (async () => {
@@ -146,15 +149,16 @@ a{
 
     /**
      * @param {string} q
+     * @param {string} sourceLang
      */
-    async function yaTranslate(q) {
+    async function yaTranslate(q, sourceLang) {
         q = dropMarks(q);
         if (!q) {
             return null;
         }
         //todo гугл переводчик вставляет пробелы где не нужно, исследовать вокруг каких знаков стоит удалять пробелы
         q = q.replace(/ \/ /g, '/');
-        q = 'https://api.browser.yandex.ru/dictionary/translate?statLang=en&targetLang=en&text=' + encodeURIComponent(q)
+        q = 'https://api.browser.yandex.ru/dictionary/translate?statLang=en&targetLang=en&text=' + encodeURIComponent(q) + (sourceLang ? '&fromLang=' + sourceLang : '')
         try {
             //dosn't work in chrome
             return await fetch(q, { mode: 'no-cors', credentials: 'omit' })
@@ -305,16 +309,19 @@ a{
         const prepare = +searchParams.get('back2stackoverflow') ? pipe(dropMarks, normalize, onlyAlphanum) : pipe(dropMarks, normalize, removeAuxiliary, onlyAlphanum);
         const q = searchParams.get('q');
         const preparedQ = prepare(q);
-        const link = preparedQ && all('.result-link a')
+        if (preparedQ) {
             //@ts-ignore
-            .find(link => link.href.indexOf('/' + q, 36) !== -1 || preparedQ.startsWith(prepare(link.textContent.replace(/^\s*(Q|A):/, ''))));
-        if (link) {
-            try {
+            const link = all('.result-link a').find(link => link.href.indexOf('/' + q, 36) !== -1 || preparedQ.startsWith(prepare(link.textContent.replace(/^\s*(Q|A):/, ''))));
+            if (link) {
+                try {
+                    //@ts-ignore
+                    history.replaceState(null, null, link.href);
+                } catch (e) { }
                 //@ts-ignore
-                history.replaceState(null, null, link.href);
-            } catch (e) { }
-            //@ts-ignore
-            return link.href;
+                return link.href;
+            } else {
+                return `https://www.google.com/search?q=${encodeURIComponent(q)}+site%3Astackoverflow.com`;
+            }
         }
     } else if (href.startsWith('https://weekly-geekly.github.io/articles/')) {
         return document.querySelector('a[href^="https://habr.com/ru/post/"]');
@@ -325,16 +332,23 @@ a{
         case 'askdev.ru':
             let askdev = textContent('.block_share span') ? textContent('h1') : null;
             if (askdev) {
-                askdev = await yaTranslate(askdev);
+                askdev = await yaTranslate(askdev, 'ru');
                 return (await findByApi(askdev, null, null, allTexts('.block_taxonomies a'))) || promtRedirect('#970f1b', toSearch(askdev));
             }
             return;
         case 'vike.io':
             let vike = textContent('h1');
             if (vike) {
-                vike = await yaTranslate(vike.replace(/[^–]+–\s/, ''));
+                vike = await yaTranslate(vike.replace(/[^–]+–\s/, ''), location.pathname.split('/', 2).find(Boolean));
                 const d = new Date(document.querySelector('.question-box .author__date').getAttribute('datetime'));
                 return (await findByApi(vike, d, d, allTexts('.tags__item--blue'))) || promtRedirect('#09c199', toSearch(vike));
+            }
+            return;
+        case 'soinside.com':
+            const soinside = await yaTranslate(textContent('h1'), 'zh');
+            console.log(soinside, textContent('h1'))
+            if (soinside) {
+                return (await findByApi(soinside, null, null, allTexts('.q-tag'))) || promtRedirect('#007bff', toSearch(soinside));
             }
             return;
         case 'intellipaat.com':
@@ -408,6 +422,7 @@ a{
                 'itranslater.com': '.body > div:last-child > a',
                 'voidcc.com': '.source > a',
                 'qarus.ru': 'em > a',
+                'uwenku.com': '.post-info a',
                 /*'quick-geek.github.io'*/ 'github.io': '.question-hyperlink',
 
                 'stackru.com': '.q-source',
