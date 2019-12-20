@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.11
+// @version      0.1.12
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -14,6 +14,8 @@
 // @match        https://stackoverflow.com/search?back2stackoverflow=*
 // @match        http://qaru.site/questions/*
 // @match        https://qaru.site/questions/*
+// @match        http://fooobar.com/questions/*
+// @match        https://fooobar.com/questions/*
 // @match        http://askdev.info/questions/*
 // @match        https://askdev.info/questions/*
 // @match        https://ubuntugeeks.com/questions/*
@@ -411,6 +413,7 @@ a{
         default:
             const cssSelectors = {
                 'qaru.site': '.question-text > a[href*="stackoverflow.com/questions/"]',
+                'fooobar.com': '.question-text > a[href*="stackoverflow.com/questions/"]',
                 'askdev.info': '.question-text > a[href*="stackoverflow.com/questions/"]',
                 'ubuntugeeks.com': '.question-text > a[href*="askubuntu.com/questions/"]',
 

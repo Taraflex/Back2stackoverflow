@@ -8,6 +8,7 @@ Required [Tampermonkey](https://tampermonkey.net/) or [Greasemonkey](https://www
 
 Supported sites:
 - qaru.site
+- fooobar.com
 - askdev.info
 - ubuntugeeks.com
 - programmerz.ru
