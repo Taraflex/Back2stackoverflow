@@ -45,7 +45,7 @@ Supported sites:
 - sprosi.pro
 - askvoprosy.com
 - stackanswers.net
-- codengineering.ru (broken - ERR_TOO_MANY_REDIRECTS)
+- codengineering.ru
 - overcoder.net
 - coderquestion.ru
 - qacode.ru
@@ -59,7 +59,7 @@ Supported sites:
 - rstopup.com
 - profikoder.com
 - itranslater.com
-- ru.voidcc.com
+- *.voidcc.com
 - v-resheno.ru
 - src-bin.com
 - intellipaat.com
