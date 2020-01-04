@@ -78,8 +78,8 @@
 // @match        https://profikoder.com/question/*
 // @match        https://itranslater.com/qa/details/*
 // @match        https://www.itranslater.com/qa/details/*
-// @match        http://ru.voidcc.com/question/*
-// @match        https://ru.voidcc.com/question/*
+// @match        http://*.voidcc.com/question/*
+// @match        https://*.voidcc.com/question/*
 // @match        http://v-resheno.ru/*
 // @match        https://v-resheno.ru/*
 // @match        https://src-bin.com/*/q/*
