@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.13
+// @version      0.1.14
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -97,6 +97,8 @@
 // @match        https://qa.1r1g.com/sf/ask/*
 // @match        https://icode9.com/*
 // @match        https://www.icode9.com/*
+// @match        https://e-learn.cn/topic/*
+// @match        https://www.e-learn.cn/topic/*
 // ==/UserScript==
 
 (async () => {
@@ -435,6 +437,7 @@ a{
                 'qarus.ru': 'em > a',
                 'uwenku.com': '.post-info a',
                 /*'quick-geek.github.io'*/ 'github.io': '.question-hyperlink',
+                'e-learn.cn': '.zhuanzai + div a',
 
                 'stackru.com': '.q-source',
                 'ask-ubuntu.ru': '.q-source',

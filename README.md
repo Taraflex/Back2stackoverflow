@@ -68,6 +68,7 @@ Supported sites:
 - quick-geek.github.io
 - uwenku.com
 - icode9.com
+- e-learn.cn
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
