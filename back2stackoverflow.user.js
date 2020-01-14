@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.18
+// @version      0.1.19
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -102,6 +102,8 @@
 // @match        https://stackoom.com/question/*
 // @match        https://codeindex.ru/q/*
 // @match        https://kompsekret.ru/q/*
+// @match        https://xszz.org/*/question-*
+// @match        https://www.xszz.org/*/question-*
 // ==/UserScript==
 
 (async () => {
@@ -366,6 +368,11 @@ a{
         case '1r1g.com':
             const qa1r1g = await yaTranslate(textContent('h1'), 'zh');
             return qa1r1g && ((await findByApi(qa1r1g, null, null, allTexts('.badge'))) || promtRedirect('#343a40', toSearch(qa1r1g)));
+        case 'xszz.org':
+            return findByApi(
+                textContent('.page-title'),
+                new Date(document.querySelector('.gp-meta-date').getAttribute('datetime'))
+            );
         case 'intellipaat.com':
             return findByApi(
                 textContent('h1'),

@@ -72,6 +72,7 @@ Supported sites:
 - stackoom.com
 - codeindex.ru
 - kompsekret.ru
+- xszz.org
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
