@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.17
+// @version      0.1.18
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -419,7 +419,7 @@ a{
             }
         default:
             const cssSelectors = {
-                'kompsekret.ru': '.question-text > a[href*="stackoverflow.com/questions/"]',
+                'kompsekret.ru': '.question-text .a-link',
                 'qaru.site': '.question-text > a[href*="stackoverflow.com/questions/"]',
                 'fooobar.com': '.question-text > a[href*="stackoverflow.com/questions/"]',
                 'askdev.info': '.question-text > a[href*="stackoverflow.com/questions/"]',
