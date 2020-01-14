@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.19
+// @version      0.1.20
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -104,6 +104,7 @@
 // @match        https://kompsekret.ru/q/*
 // @match        https://xszz.org/*/question-*
 // @match        https://www.xszz.org/*/question-*
+// @match        https://*.developreference.com/article/*
 // ==/UserScript==
 
 (async () => {
@@ -373,6 +374,10 @@ a{
                 textContent('.page-title'),
                 new Date(document.querySelector('.gp-meta-date').getAttribute('datetime'))
             );
+        case 'developreference.com':
+            const parts = document.title.split(' - ');
+            const tag = parts.pop();
+            return findByApi(parts.join(' - '), null, null, [tag]);
         case 'intellipaat.com':
             return findByApi(
                 textContent('h1'),
@@ -382,8 +387,8 @@ a{
             );
         case 'oipapio.com':
             const oipapio = textContent('h1').split(' - ');
-            const tag = oipapio.shift();
-            return findByApi(oipapio.join(' - '), null, null, [tag]);
+            const tag1 = oipapio.shift();
+            return findByApi(oipapio.join(' - '), null, null, [tag1]);
         case 'icode9.com':
             return textContent('#paragraph > p:last-child').split('来源：', 2)[1].trim();
         case 'v-resheno.ru':
