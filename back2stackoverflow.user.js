@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.14
+// @version      0.1.15
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -99,6 +99,7 @@
 // @match        https://www.icode9.com/*
 // @match        https://e-learn.cn/topic/*
 // @match        https://www.e-learn.cn/topic/*
+// @match        https://stackoom.com/question/*
 // ==/UserScript==
 
 (async () => {
@@ -340,6 +341,8 @@ a{
 
     const host = location.hostname.split('.').slice(-2).join('.');
     switch (host) {
+        case 'stackoom.com':
+            return byNumber(document.getElementById('question').dataset.questionid);
         case 'askdev.ru':
             let askdev = textContent('.block_share span') ? textContent('h1') : null;
             if (askdev) {
