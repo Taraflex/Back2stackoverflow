@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.16
+// @version      0.1.17
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -101,6 +101,7 @@
 // @match        https://www.e-learn.cn/topic/*
 // @match        https://stackoom.com/question/*
 // @match        https://codeindex.ru/q/*
+// @match        https://kompsekret.ru/q/*
 // ==/UserScript==
 
 (async () => {
@@ -418,6 +419,7 @@ a{
             }
         default:
             const cssSelectors = {
+                'kompsekret.ru': '.question-text > a[href*="stackoverflow.com/questions/"]',
                 'qaru.site': '.question-text > a[href*="stackoverflow.com/questions/"]',
                 'fooobar.com': '.question-text > a[href*="stackoverflow.com/questions/"]',
                 'askdev.info': '.question-text > a[href*="stackoverflow.com/questions/"]',

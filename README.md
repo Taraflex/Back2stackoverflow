@@ -71,6 +71,7 @@ Supported sites:
 - e-learn.cn
 - stackoom.com
 - codeindex.ru
+- kompsekret.ru
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
