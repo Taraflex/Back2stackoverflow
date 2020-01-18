@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.21
+// @version      0.1.22
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -213,7 +213,6 @@ a{
      * @param {string[]} [tags]
      */
     function findByApi(q, before, after, tags) {
-        console.log(arguments)
         q = dropMarks(q);
         return q && fetch(
             `https://api.stackexchange.com/2.2/search?page=1&pagesize=1&order=desc&sort=relevance&intitle=${encodeURIComponent(q)}&site=stackoverflow` +
@@ -255,7 +254,7 @@ a{
     * @param {string} s
     */
     function dropMarks(s) {
-        return s && s.replace(/\[(duplikować|duplicado|duplicar|duplikat|dublicate|duplicate|дубликат|закрыто|closed|geschlossen|zamknięte|cerrado)\]\s*$/i, '').trim();
+        return s && s.replace(/\[(на удержании|on hold|duplikować|duplicado|duplicar|duplikat|dublicate|duplicate|дубликат|закрыто|closed|geschlossen|zamknięte|cerrado)\]\s*$/i, '').trim();
     }
 
     /**
