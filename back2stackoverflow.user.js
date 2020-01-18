@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.20
+// @version      0.1.21
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -213,6 +213,7 @@ a{
      * @param {string[]} [tags]
      */
     function findByApi(q, before, after, tags) {
+        console.log(arguments)
         q = dropMarks(q);
         return q && fetch(
             `https://api.stackexchange.com/2.2/search?page=1&pagesize=1&order=desc&sort=relevance&intitle=${encodeURIComponent(q)}&site=stackoverflow` +
@@ -386,9 +387,12 @@ a{
                 allTexts('.qa-q-view-main .qa-tag-link')
             );
         case 'oipapio.com':
-            const oipapio = textContent('h1').split(' - ');
-            const tag1 = oipapio.shift();
-            return findByApi(oipapio.join(' - '), null, null, [tag1]);
+            return findByApi(
+                textContent('h1').replace(/^.*? - /, ''),
+                new Date(textContent('.post-meta .date')),
+                null,
+                allTexts('.category')
+            );
         case 'icode9.com':
             return textContent('#paragraph > p:last-child').split('来源：', 2)[1].trim();
         case 'v-resheno.ru':
@@ -431,11 +435,11 @@ a{
             }
         default:
             const cssSelectors = {
-                'kompsekret.ru': '.question-text .a-link',
-                'qaru.site': '.question-text > a[href*="stackoverflow.com/questions/"]',
-                'fooobar.com': '.question-text > a[href*="stackoverflow.com/questions/"]',
-                'askdev.info': '.question-text > a[href*="stackoverflow.com/questions/"]',
-                'ubuntugeeks.com': '.question-text > a[href*="askubuntu.com/questions/"]',
+                'kompsekret.ru': '.question-text > .a-link',
+                'qaru.site': '.question-text > .aa-link',
+                'fooobar.com': '.question-text > .aa-link',
+                'askdev.info': '.question-text > .a-link',
+                'ubuntugeeks.com': '.question-text > .a-link',
 
                 'qa-help.ru': 'a.uncolored-text[href*="stackoverflow.com/questions/"]',//встречаются вопросы с ru.stackoverflow.com
                 'programmerz.ru': '.source-share-link',

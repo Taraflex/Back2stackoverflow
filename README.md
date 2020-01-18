@@ -7,7 +7,7 @@ Userscript for redirect to stackoverflow.com from machine-translated sites.
 Required [Tampermonkey](https://tampermonkey.net/) or [Greasemonkey](https://www.greasespot.net/) or [Violentmonkey](https://violentmonkey.github.io/get-it/) or another browser extension for userscript support.
 
 Supported sites:
-- qaru.site
+- ~~qaru.site~~ (closed?)
 - fooobar.com
 - askdev.info
 - ubuntugeeks.com
