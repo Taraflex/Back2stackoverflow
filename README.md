@@ -73,7 +73,8 @@ Supported sites:
 - codeindex.ru
 - kompsekret.ru
 - xszz.org
-- developreference.com
+- *.developreference.com
+- *.develop-bugs.com
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru

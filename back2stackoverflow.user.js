@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.22
+// @version      0.1.23
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -105,6 +105,7 @@
 // @match        https://xszz.org/*/question-*
 // @match        https://www.xszz.org/*/question-*
 // @match        https://*.developreference.com/article/*
+// @match        https://*.develop-bugs.com/article/*
 // ==/UserScript==
 
 (async () => {
@@ -374,6 +375,7 @@ a{
                 textContent('.page-title'),
                 new Date(document.querySelector('.gp-meta-date').getAttribute('datetime'))
             );
+        case 'develop-bugs.com':
         case 'developreference.com':
             const parts = document.title.split(' - ');
             const tag = parts.pop();
