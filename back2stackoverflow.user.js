@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.23
+// @version      0.1.24
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -106,6 +106,7 @@
 // @match        https://www.xszz.org/*/question-*
 // @match        https://*.developreference.com/article/*
 // @match        https://*.develop-bugs.com/article/*
+// @match        https://www.thinbug.com/q/*
 // ==/UserScript==
 
 (async () => {
@@ -404,6 +405,7 @@ a{
             return byNumber(lastPathPart(), 16);
         case 'quabr.com':
             return byNumber(location.pathname.split('/', 2)[1]);
+        case 'thinbug.com':
         case 'profikoder.com':
         case 'progexact.com':
         case 'bestecode.com':
