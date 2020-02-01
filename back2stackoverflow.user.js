@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.26
+// @version      0.1.27
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -110,6 +110,8 @@
 // @match        https://*.programqa.com/question/*
 // @match        https://husl.ru/questions/*
 // @match        https://www.husl.ru/questions/*
+// @match        https://myht.ru/question/*
+// @match        https://www.myht.ru/question/*
 // ==/UserScript==
 
 (async () => {
@@ -402,6 +404,8 @@ a{
             return textContent('#paragraph > p:last-child').split('来源：', 2)[1].trim();
         case 'v-resheno.ru':
             return textContent('.linkurl > b');
+        case 'myht.ru':
+            return byNumber(lastPathPart().split('-', 1)[0]);
         case 'src-bin.com':
         case 'i-harness.com':
         case 'code-examples.net':

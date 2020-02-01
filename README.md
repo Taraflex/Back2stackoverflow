@@ -78,6 +78,7 @@ Supported sites:
 - thinbug.com
 - *.programqa.com
 - husl.ru
+- myht.ru
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
