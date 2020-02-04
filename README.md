@@ -21,6 +21,7 @@ Supported sites:
 - stackoverrun.com
 - qa-help.ru
 - exceptionshub.com
+- answeright.com
 - kotaeta.com
 - ciupacabra.com
 - de-vraag.com
