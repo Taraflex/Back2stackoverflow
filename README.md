@@ -80,6 +80,7 @@ Supported sites:
 - husl.ru
 - myht.ru
 - qarchive.ru
+- coderoad.ru
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru

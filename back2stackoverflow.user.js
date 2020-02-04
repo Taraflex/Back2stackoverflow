@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.28
+// @version      0.1.29
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -113,6 +113,7 @@
 // @match        https://myht.ru/question/*
 // @match        https://www.myht.ru/question/*
 // @match        https://qarchive.ru/*
+// @match        https://coderoad.ru/*
 // ==/UserScript==
 
 (async () => {
@@ -411,6 +412,7 @@ a{
         case 'i-harness.com':
         case 'code-examples.net':
             return byNumber(lastPathPart(), 16);
+        case 'coderoad.ru':
         case 'quabr.com':
             return byNumber(location.pathname.split('/', 2)[1]);
         case 'programqa.com':
