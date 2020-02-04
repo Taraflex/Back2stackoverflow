@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.29
+// @version      0.1.30
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -41,11 +41,12 @@
 // @match        https://de-vraag.com/*
 // @match        https://switch-case.ru/*
 // @match        https://switch-case.com/*
-// @match        https://es.switch-case.com/*
-// @match        https://pt.switch-case.com/*
-// @match        https://de.switch-case.com/*
-// @match        https://bn.switch-case.com/*
-// @match        https://ar.switch-case.com/*
+// @match        https://*.switch-case.com/*
+// @match        https://bildiredi.com/*
+// @match        https://donolik.com/*
+// @match        https://pytannie.com/*
+// @match        https://sozdizimi.com/*
+// @match        https://zapytay.com/*
 // @match        https://answer-id.com/*
 // @match        https://while-do.com/*
 // @match        https://365airsoft.com/*/questions/*
@@ -489,11 +490,11 @@ a{
                 'de-vraag.com': '.footer_question.mt-3 > a',
                 'switch-case.ru': '.footer_question.mt-3 > a',
                 'switch-case.com': '.footer_question.mt-3 > a',
-                'es.switch-case.com': '.footer_question.mt-3 > a',
-                'pt.switch-case.com': '.footer_question.mt-3 > a',
-                'de.switch-case.com': '.footer_question.mt-3 > a',
-                'bn.switch-case.com': '.footer_question.mt-3 > a',
-                'ar.switch-case.com': '.footer_question.mt-3 > a',
+                'bildiredi.com': '.footer_question.mt-3 > a',
+                'donolik.com': '.footer_question.mt-3 > a',
+                'pytannie.com': '.footer_question.mt-3 > a',
+                'sozdizimi.com': '.footer_question.mt-3 > a',
+                'zapytay.com': '.footer_question.mt-3 > a',
                 'answer-id.com': '.footer_question.mt-3 > a',
                 'while-do.com': '.footer_question.mt-3 > a'
             };
