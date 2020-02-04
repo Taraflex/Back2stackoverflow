@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.31
+// @version      0.1.32
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -116,6 +116,8 @@
 // @match        https://qarchive.ru/*
 // @match        https://coderoad.ru/*
 // @match        https://qastack.ru/*
+// @match        https://answeright.com/*
+// @match        https://www.answeright.com/*
 // ==/UserScript==
 
 (async () => {
@@ -480,6 +482,7 @@ a{
                 'husl.ru': '.source-link',
                 'qarchive.ru': 'cite > a',
                 'qastack.ru': '.text-muted > a:last-child',
+                'answeright.com': '.wrapper-question-card .v-card__actions > a:not(.edited-author-button):not(.category-question-button)',
 
                 'stackru.com': '.q-source',
                 'ask-ubuntu.ru': '.q-source',
