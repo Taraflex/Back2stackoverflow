@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.34
+// @version      0.1.35
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -33,6 +33,7 @@
 // @match        https://stackovernet.com/*/q/*
 // @match        https://*.stackovernet.com/*/q/*
 // @match        https://stackoverrun.com/*/q/*
+// @match        https://ffff65535.com/*/q/*
 // @match        https://qna.one/*
 // @match        https://qa-help.ru/questions/*
 // @match        https://exceptionshub.com/*
@@ -414,6 +415,7 @@ a{
             return textContent('.linkurl > b');
         case 'myht.ru':
             return byNumber(lastPathPart().split('-', 1)[0]);
+        case 'ffff65535.com':
         case 'src-bin.com':
         case 'i-harness.com':
         case 'code-examples.net':

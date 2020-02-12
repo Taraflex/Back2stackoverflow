@@ -84,6 +84,7 @@ Supported sites:
 - coderoad.ru
 - qastack.ru
 - brokencontrollers.com
+- ffff65535.com
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
