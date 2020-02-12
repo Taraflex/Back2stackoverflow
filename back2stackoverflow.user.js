@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.35
+// @version      0.1.36
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -121,6 +121,8 @@
 // @match        https://www.answeright.com/*
 // @match        https://brokencontrollers.com/faq/*
 // @match        https://www.brokencontrollers.com/faq/*
+// @match        https://itdaan.com/blog/*
+// @match        https://www.itdaan.com/blog/*
 // ==/UserScript==
 
 (async () => {
@@ -456,6 +458,10 @@ a{
                 //@ts-ignore
                 return all('.panel-body a')[1].href;
             }
+        case 'itdaan.com':
+            const uv = document.querySelector('input[name="url"]');
+            //@ts-ignore
+            return uv && uv.value;
         default:
             const cssSelectors = {
                 'kompsekret.ru': '.question-text > .a-link',

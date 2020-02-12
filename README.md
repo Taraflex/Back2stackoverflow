@@ -85,6 +85,7 @@ Supported sites:
 - qastack.ru
 - brokencontrollers.com
 - ffff65535.com
+- itdaan.com
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
