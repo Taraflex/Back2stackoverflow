@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.33
+// @version      0.1.34
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -118,6 +118,8 @@
 // @match        https://qastack.ru/*
 // @match        https://answeright.com/*
 // @match        https://www.answeright.com/*
+// @match        https://brokencontrollers.com/faq/*
+// @match        https://www.brokencontrollers.com/faq/*
 // ==/UserScript==
 
 (async () => {
@@ -419,6 +421,7 @@ a{
         case 'coderoad.ru':
         case 'quabr.com':
             return byNumber(location.pathname.split('/', 2)[1]);
+        case 'brokencontrollers.com':
         case 'programqa.com':
         case 'thinbug.com':
         case 'profikoder.com':

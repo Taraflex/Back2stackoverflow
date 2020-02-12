@@ -83,6 +83,7 @@ Supported sites:
 - qarchive.ru
 - coderoad.ru
 - qastack.ru
+- brokencontrollers.com
 
 Partially supported sites (Yandex Translate is used to find the original question - works well only in Tampermonkey)
 - askdev.ru
