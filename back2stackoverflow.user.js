@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.36
+// @version      0.1.37
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -93,8 +93,10 @@
 // @match        https://weekly-geekly.github.io/articles/*
 // @match        https://askdev.ru/q/*
 // @match        https://vike.io/*/*/*
-// @match        http://www.uwenku.com/question/*
-// @match        https://www.uwenku.com/question/*
+// @match        http://uwenku.com/question/*
+// @match        https://uwenku.com/question/*
+// @match        http://*.uwenku.com/question/*
+// @match        https://*.uwenku.com/question/*
 // @match        https://www.soinside.com/question/*
 // @match        https://qa.1r1g.com/sf/ask/*
 // @match        https://icode9.com/*
