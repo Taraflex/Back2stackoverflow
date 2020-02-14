@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.37
+// @version      0.1.38
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -72,6 +72,9 @@
 // @match        https://progaide.com/question/*
 // @match        http://stackz.ru/en/*/*
 // @match        http://stackz.ru/ru/*/*
+// @match        https://www.it-swarm.xyz/*/*
+// @match        https://www.it-swarm.asia/*/*
+// @match        https://www.it-swarm.dev/*/*
 // @match        https://www.it-swarm.net/*/*
 // @match        https://bonprog.com/question/*
 // @match        https://bestecode.com/question/*
@@ -483,7 +486,6 @@ a{
                 'sprosi.pro': '#qsource > a',
                 'overcoder.net': '.info_outlink',
                 'qacode.ru': '.question-info .cc-link',
-                'it-swarm.net': '.gat[data-cat="q-source"]',
                 'rstopup.com': '.td-post-content .origlink > a',
                 'itranslater.com': '.body > div:last-child > a',
                 'voidcc.com': '.source > a',
@@ -496,6 +498,11 @@ a{
                 'qarchive.ru': 'cite > a',
                 'qastack.ru': '.text-muted > a:last-child',
                 'answeright.com': '.wrapper-question-card .v-card__actions > a:not(.edited-author-button):not(.category-question-button)',
+
+                'it-swarm.xyz': '.gat[data-cat="q-source"]',
+                'it-swarm.asia': '.gat[data-cat="q-source"]',
+                'it-swarm.dev': '.gat[data-cat="q-source"]',
+                'it-swarm.net': '.gat[data-cat="q-source"]',
 
                 'stackru.com': '.q-source',
                 'ask-ubuntu.ru': '.q-source',
