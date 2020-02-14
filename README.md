@@ -53,7 +53,7 @@ Supported sites:
 - progaide.com
 - stackz.ru/en
 - stackz.ru/ru
-- it-swarm.net
+- it-swarm.(net|dev|asia|xyz)
 - bonprog.com
 - bestecode.com
 - progexact.com
@@ -67,7 +67,7 @@ Supported sites:
 - oipapio.com
 - qarus.ru
 - quick-geek.github.io
-- uwenku.com
+- *.uwenku.com
 - icode9.com
 - e-learn.cn
 - stackoom.com
