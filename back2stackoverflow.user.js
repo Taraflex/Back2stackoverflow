@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.39
+// @version      0.1.40
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -242,7 +242,7 @@ a{
             `https://api.stackexchange.com/2.2/search?page=1&pagesize=1&order=desc&sort=relevance&intitle=${encodeURIComponent(q)}&site=stackoverflow` +
             (after ? '&fromdate=' + (after.getTime() / 1000 - 120 | 0) : '') +
             (before ? '&todate=' + (before.getTime() / 1000 + 120 | 0) : '') +
-            (Array.isArray(tags) && tags.length > 0 ? '&tagged=' + encodeURIComponent(tags.join(';')) : '')
+            (Array.isArray(tags) && tags.length > 0 ? '&tagged=' + encodeURIComponent(Array.from(new Set(tags)).join(';')) : '')
             , { credentials: 'omit' })
             .then(r => r.json())
             .then(r => r.items && r.items[0] && r.items[0].link);
@@ -278,7 +278,7 @@ a{
     * @param {string} s
     */
     function dropMarks(s) {
-        return s && s.replace(/\[(на удержании|on hold|duplikować|duplicado|duplicar|duplikat|dublicate|duplicate|дубликат|закрыто|closed|geschlossen|zamknięte|cerrado)\]\s*$/i, '').trim();
+        return s && s.replace(/\[(на удержании|on hold|duplikować|duplicado|duplicar|duplikat|dublicate|duplicate|дубликат|закрыто|закрытый|closed|geschlossen|zamknięte|cerrado)\]\s*$/i, '').trim();
     }
 
     /**
