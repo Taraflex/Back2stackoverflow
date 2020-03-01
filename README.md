@@ -92,3 +92,4 @@ Partially supported sites (Yandex Translate is used to find the original questio
 - vike.io
 - soinside.com
 - qa.1r1g.com
+- legkovopros.ru

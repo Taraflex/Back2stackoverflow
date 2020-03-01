@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.38
+// @version      0.1.39
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -128,6 +128,7 @@
 // @match        https://www.brokencontrollers.com/faq/*
 // @match        https://itdaan.com/blog/*
 // @match        https://www.itdaan.com/blog/*
+// @match        https://legkovopros.ru/questions/*
 // ==/UserScript==
 
 (async () => {
@@ -369,8 +370,9 @@ a{
 
     const host = location.hostname.split('.').slice(-2).join('.');
     switch (host) {
-        case 'stackoom.com':
-            return byNumber(document.getElementById('question').dataset.questionid);
+        case 'legkovopros.ru':
+            const legkovopros = await yaTranslate(textContent('h1'), 'ru');
+            return (await findByApi(legkovopros, null, null, allTexts('.tag'))) || promtRedirect('#55b252', toSearch(legkovopros));
         case 'askdev.ru':
             let askdev = textContent('.block_share span') ? textContent('h1') : null;
             if (askdev) {
@@ -420,6 +422,8 @@ a{
             return textContent('#paragraph > p:last-child').split('来源：', 2)[1].trim();
         case 'v-resheno.ru':
             return textContent('.linkurl > b');
+        case 'stackoom.com':
+            return byNumber(document.getElementById('question').dataset.questionid);
         case 'myht.ru':
             return byNumber(lastPathPart().split('-', 1)[0]);
         case 'ffff65535.com':
