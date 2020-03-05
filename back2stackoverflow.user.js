@@ -122,6 +122,22 @@
 // @match        https://qarchive.ru/*
 // @match        https://coderoad.ru/*
 // @match        https://qastack.ru/*
+// @match        https://qastack.in.th/*
+// @match        https://qastack.info.tr/*
+// @match        https://qastack.co.in/*
+// @match        https://qastack.it/*
+// @match        https://qastack.jp/*
+// @match        https://qastack.com.br/*
+// @match        https://qastack.id/*
+// @match        https://qastack.cn/*
+// @match        https://qastack.pl/*
+// @match        https://qastack.com.ua/*
+// @match        https://qastack.fr/*
+// @match        https://qastack.kr/*
+// @match        https://qastack.com.de/*
+// @match        https://qastack.net.bd/*
+// @match        https://qastack.mx/*
+// @match        https://qastack.vn/*
 // @match        https://answeright.com/*
 // @match        https://www.answeright.com/*
 // @match        https://brokencontrollers.com/faq/*
@@ -501,6 +517,22 @@ a{
                 'husl.ru': '.source-link',
                 'qarchive.ru': 'cite > a',
                 'qastack.ru': '.text-muted > a:last-child',
+                'qastack.in.th': '.text-muted > a:last-child',
+                'qastack.info.tr': '.text-muted > a:last-child',
+                'qastack.co.in': '.text-muted > a:last-child',
+                'qastack.it': '.text-muted > a:last-child',
+                'qastack.jp': '.text-muted > a:last-child',
+                'qastack.com.br': '.text-muted > a:last-child',
+                'qastack.id': '.text-muted > a:last-child',
+                'qastack.cn': '.text-muted > a:last-child',
+                'qastack.pl': '.text-muted > a:last-child',
+                'qastack.com.ua': '.text-muted > a:last-child',
+                'qastack.fr': '.text-muted > a:last-child',
+                'qastack.kr': '.text-muted > a:last-child',
+                'qastack.com.de': '.text-muted > a:last-child',
+                'qastack.net.bd': '.text-muted > a:last-child',
+                'qastack.mx': '.text-muted > a:last-child',
+                'qastack.vn': '.text-muted > a:last-child',
                 'answeright.com': '.wrapper-question-card .v-card__actions > a:not(.edited-author-button):not(.category-question-button)',
 
                 'it-swarm.xyz': '.gat[data-cat="q-source"]',
