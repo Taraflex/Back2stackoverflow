@@ -82,7 +82,7 @@ Supported sites:
 - myht.ru
 - qarchive.ru
 - coderoad.ru
-- qastack.ru
+- qastack.(ru|in.th|info.tr|co.in|it|jp|com.br|id|cn|pl|com.ua|fr|kr|com.de|net.bd|mx|vn)
 - brokencontrollers.com
 - ffff65535.com
 - itdaan.com
