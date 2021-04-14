@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Back2stackoverflow
-// @version      0.1.40
+// @version      0.1.41
 // @description  Redirect to stackoverflow.com from machine-translated sites
 // @namespace    taraflex
 // @author       taraflex.red@gmail.com
@@ -129,6 +129,7 @@
 // @match        https://itdaan.com/blog/*
 // @match        https://www.itdaan.com/blog/*
 // @match        https://legkovopros.ru/questions/*
+// @match        https://prog-help.ru/*
 // ==/UserScript==
 
 (async () => {
@@ -478,6 +479,7 @@ a{
                 'fooobar.com': '.question-text > .aa-link',
                 'askdev.info': '.question-text > .a-link',
                 'ubuntugeeks.com': '.question-text > .a-link',
+                'prog-help.ru': '.eclip > a[href*="stackoverflow.com/questions/"]',
 
                 'qa-help.ru': 'a.uncolored-text[href*="stackoverflow.com/questions/"]',//встречаются вопросы с ru.stackoverflow.com
                 'programmerz.ru': '.source-share-link',
