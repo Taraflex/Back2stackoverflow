@@ -129,6 +129,7 @@
 // @match        https://itdaan.com/blog/*
 // @match        https://www.itdaan.com/blog/*
 // @match        https://legkovopros.ru/questions/*
+// @match        https://www.generacodice.com/*
 // ==/UserScript==
 
 (async () => {
@@ -478,6 +479,7 @@ a{
                 'fooobar.com': '.question-text > .aa-link',
                 'askdev.info': '.question-text > .a-link',
                 'ubuntugeeks.com': '.question-text > .a-link',
+                'generacodice.com': '#fontePrincipale > a.link',
 
                 'qa-help.ru': 'a.uncolored-text[href*="stackoverflow.com/questions/"]',//встречаются вопросы с ru.stackoverflow.com
                 'programmerz.ru': '.source-share-link',
